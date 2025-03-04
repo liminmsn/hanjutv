@@ -9,7 +9,7 @@ void main() {
 
   doWhenWindowReady(() {
     final win = appWindow;
-    win.minSize = const Size(400, 300);
+    win.minSize = const Size(800, 600);
     win.size = const Size(800, 600);
     win.alignment = Alignment.center;
     win.show();
@@ -22,9 +22,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "韩剧tv",
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         fontFamily: GoogleFonts.sigmar().fontFamily,
       ),
       home: MyAppCenter(),
@@ -40,6 +39,7 @@ class MyAppCenter extends StatefulWidget {
   State<MyAppCenter> createState() => _MyAppCenterState();
 }
 
+//主程序state
 class _MyAppCenterState extends State<MyAppCenter> {
   late int selectIdx = 0;
 
@@ -51,54 +51,61 @@ class _MyAppCenterState extends State<MyAppCenter> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
-          body: Row(
+          body: Column(
             children: [
-              Container(
-                width: constraints.minWidth >= 600 ? 180 : null,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(1, 1),
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primaryContainer.withAlpha(100),
-                      blurRadius: 2,
-                    ),
-                  ],
-                ),
-                child: NavigationRail(
-                  extended: constraints.minWidth >= 600,
-                  destinations: [
-                    NavigBtn(
-                      active: selectIdx == 0,
-                      icon: Icon(Icons.home_outlined, size: 20),
-                      selectedIcon: Icon(
-                        Icons.home,
-                        color: selectColor,
-                        size: 20,
+              TopBar(),
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      width: constraints.minWidth >= 600 ? 150 : null,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(1, 1),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer.withAlpha(100),
+                            blurRadius: 2,
+                          ),
+                        ],
                       ),
-                      selectColor: selectColor,
-                      label: '精选推荐',
-                    ),
-                    NavigBtn(
-                      active: selectIdx == 1,
-                      icon: Icon(Icons.favorite_outline, size: 20),
-                      selectedIcon: Icon(
-                        Icons.favorite,
-                        color: selectColor,
-                        size: 20,
+                      child: NavigationRail(
+                        extended: constraints.minWidth >= 600,
+                        destinations: [
+                          NavigBtn(
+                            active: selectIdx == 0,
+                            icon: Icon(Icons.home_outlined, size: 20),
+                            selectedIcon: Icon(
+                              Icons.home,
+                              color: selectColor,
+                              size: 20,
+                            ),
+                            selectColor: selectColor,
+                            label: '精选推荐',
+                          ),
+                          NavigBtn(
+                            active: selectIdx == 1,
+                            icon: Icon(Icons.favorite_outline, size: 20),
+                            selectedIcon: Icon(
+                              Icons.favorite,
+                              color: selectColor,
+                              size: 20,
+                            ),
+                            label: '喜欢列表',
+                            selectColor: selectColor,
+                          ),
+                        ],
+                        selectedIndex: selectIdx,
+                        onDestinationSelected: (value) {
+                          setState(() => selectIdx = value);
+                        },
                       ),
-                      label: '喜欢列表',
-                      selectColor: selectColor,
                     ),
+                    Expanded(child: viewList[selectIdx]),
                   ],
-                  selectedIndex: selectIdx,
-                  onDestinationSelected: (value) {
-                    setState(() => selectIdx = value);
-                  },
                 ),
               ),
-              Expanded(child: viewList[selectIdx]),
             ],
           ),
         );
@@ -107,6 +114,45 @@ class _MyAppCenterState extends State<MyAppCenter> {
   }
 }
 
+//顶部标题栏
+class TopBar extends StatelessWidget {
+  const TopBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return WindowTitleBarBox(
+      child: MoveWindow(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primaryContainer,
+          ),
+          child: Flex(
+            direction: Axis.horizontal,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                // flex: 6,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Row(children: [Text("韩剧tv")]),
+                ),
+              ),
+              Row(
+                children: [
+                  MinimizeWindowButton(),
+                  MaximizeWindowButton(),
+                  CloseWindowButton(),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//左侧bar按钮
 class NavigBtn extends NavigationRailDestination {
   late bool active = false;
   NavigBtn({
