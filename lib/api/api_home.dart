@@ -2,38 +2,53 @@ import 'package:hanjutv/net/yrequest.dart';
 import 'package:html/parser.dart';
 
 class ApiHome {
-  List<YCard> listycar = [];
+  List<YCardITem> listycar = [];
   ApiHome(String body) {
     var dom = parse(body);
     var ulArr = dom.getElementsByClassName('fed-list-info');
     for (var ul in ulArr) {
       for (var li in ul.children) {
-        var ycard = YCard(
-          pics: li.children[0].attributes['data-original']?[0] ?? '',
-          score: li.children[0].children[1].text,
-          remarks: li.children[0].children[2].text,
-          title: li.children[1].text,
-          desc: li.children[2].text,
-          src: li.children[1].attributes['href']?[0] ?? '',
+        var ycard = YCardITem(
+          pics: li.children[0].attributes['data-original'] ?? 'null',
+          src: li.children[0].attributes['href'] ?? 'nul',
+          score:
+              // ignore: prefer_is_empty
+              li.getElementsByClassName('fed-list-score').length > 0
+                  ? li.getElementsByClassName('fed-list-score')[0].text
+                  : 'null',
+          remarks:
+              // ignore: prefer_is_empty
+              li.getElementsByClassName('fed-list-remarks').length > 0
+                  ? li.getElementsByClassName('fed-list-remarks')[0].text
+                  : 'none',
+          title: li.getElementsByClassName('fed-list-title')[0].text,
+          desc:
+              // ignore: prefer_is_empty
+              li.getElementsByClassName('fed-list-desc').length > 0
+                  ? li.getElementsByClassName('fed-list-desc')[0].text
+                  : 'none',
         );
-        listycar.add(ycard);
+        if (ycard.pics != 'null') {
+          listycar.add(ycard);
+        }
       }
     }
   }
-  static Future<List<YCard>> getData() async {
+  static Future<List<YCardITem>> getData() async {
     var res = await Yrequest().then();
-    return res;
+    var list = ApiHome(res.body).listycar;
+    return list;
   }
 }
 
-class YCard {
+class YCardITem {
   String pics;
   String score;
   String remarks;
   String title;
   String desc;
   String src;
-  YCard({
+  YCardITem({
     required this.pics,
     required this.score,
     required this.remarks,

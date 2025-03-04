@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hanjutv/view/home.dart';
 import 'package:hanjutv/view/like.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
 
-  doWhenWindowReady(() {
-    final win = appWindow;
-    win.minSize = const Size(800, 600);
-    win.size = const Size(800, 600);
-    win.alignment = Alignment.center;
-    win.show();
-  });
+  if (Platform.isWindows) {
+    doWhenWindowReady(() {
+      final win = appWindow;
+      win.minSize = const Size(400, 600);
+      win.size = const Size(1200, 800);
+      win.alignment = Alignment.center;
+      win.show();
+    });
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -23,9 +26,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreenAccent),
         fontFamily: GoogleFonts.sigmar().fontFamily,
       ),
+      darkTheme: ThemeData.dark(), // 深色主题（黑色主题）
+      themeMode: ThemeMode.light,
       home: MyAppCenter(),
     );
   }
@@ -53,7 +58,7 @@ class _MyAppCenterState extends State<MyAppCenter> {
         return Scaffold(
           body: Column(
             children: [
-              TopBar(),
+              if (Platform.isWindows) TopBar(),
               Expanded(
                 child: Row(
                   children: [
@@ -82,7 +87,7 @@ class _MyAppCenterState extends State<MyAppCenter> {
                               size: 20,
                             ),
                             selectColor: selectColor,
-                            label: '精选推荐',
+                            label: '首页',
                           ),
                           NavigBtn(
                             active: selectIdx == 1,
