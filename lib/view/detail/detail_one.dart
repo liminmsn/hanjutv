@@ -17,11 +17,11 @@ class _DetailOneState extends State<DetailOne> {
         onPressed: () {
           Navigator.pop(context);
         },
-        child: Icon(Icons.reply), // Icon displayed on the button
+        child: Icon(Icons.reply),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(40),
           child: Flex(
             direction: Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +50,7 @@ class _DetailOneState extends State<DetailOne> {
                                       ),
                                     ),
                                     SizedBox(height: 10),
-                                    Text('主演：${widget.yCardITem.desc}'),
+                                    Text('主演：${widget.yCardITem.src}'),
                                     SizedBox(height: 4),
                                     Text('导演：${widget.yCardITem.desc}'),
                                     SizedBox(height: 4),
@@ -78,7 +78,16 @@ class _DetailOneState extends State<DetailOne> {
                         child: Container(
                           width: double.infinity,
                           padding: EdgeInsets.all(20),
-                          child: Text("hello"),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              YToggleLabel(
+                                labelArr: ['选集播放', '剧情介绍'],
+                                widgetArr: [YAnalecta(), YDescribes()],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -113,6 +122,81 @@ class _DetailOneState extends State<DetailOne> {
           ),
         ),
       ),
+    );
+  }
+}
+
+//选集播放
+class YDescribes extends StatelessWidget {
+  const YDescribes({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("介绍");
+  }
+}
+
+//影片介绍
+class YAnalecta extends StatelessWidget {
+  const YAnalecta({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("选集");
+  }
+}
+
+//label切换
+class YToggleLabel extends StatefulWidget {
+  final List<String> labelArr;
+  final List<Widget> widgetArr;
+  const YToggleLabel({
+    super.key,
+    required this.labelArr,
+    required this.widgetArr,
+  });
+
+  @override
+  State<YToggleLabel> createState() => _ToggleLabelState();
+}
+
+class _ToggleLabelState extends State<YToggleLabel> {
+  int selectIdx = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            for (var i = 0; i < widget.labelArr.length; i++)
+              Padding(
+                padding: EdgeInsets.only(bottom: 10, right: 10),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      selectIdx = i;
+                    });
+                  },
+                  child: Text(
+                    widget.labelArr[i],
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color:
+                          selectIdx == i
+                              ? Theme.of(context).colorScheme.primary
+                              : null,
+                    ),
+                  ),
+                ),
+              ),
+            // Text('$selectIdx'),
+          ],
+        ),
+        widget.widgetArr[selectIdx],
+      ],
     );
   }
 }
