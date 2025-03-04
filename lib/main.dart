@@ -1,3 +1,4 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hanjutv/view/home.dart';
@@ -5,6 +6,14 @@ import 'package:hanjutv/view/like.dart';
 
 void main() {
   runApp(const MyApp());
+
+  doWhenWindowReady(() {
+    final win = appWindow;
+    win.minSize = const Size(400, 300);
+    win.size = const Size(800, 600);
+    win.alignment = Alignment.center;
+    win.show();
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -13,6 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "韩剧tv",
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         fontFamily: GoogleFonts.sigmar().fontFamily,
@@ -33,10 +43,7 @@ class MyAppCenter extends StatefulWidget {
 class _MyAppCenterState extends State<MyAppCenter> {
   late int selectIdx = 0;
 
-  final List<Widget> viewList = [
-    ViewHome(),
-    ViewLike()
-  ];
+  final List<Widget> viewList = [ViewHome(), ViewLike()];
 
   @override
   Widget build(BuildContext context) {
