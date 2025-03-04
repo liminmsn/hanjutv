@@ -74,7 +74,6 @@ class Ycard extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(item.src),
             ],
           ),
         ),

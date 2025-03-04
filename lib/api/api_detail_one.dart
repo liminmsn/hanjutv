@@ -1,3 +1,96 @@
+import 'package:hanjutv/net/yrequest.dart';
+import 'package:html/parser.dart';
+
 class ApiDetailOne {
-  ApiDetailOne(String body) {}
+  late ApiDetailItemOne apiDetailItemOne;
+  late ApiDetailItemTwo apiDetailItemTwo;
+  ApiDetailOne(String body) {
+    var dom = parse(body);
+    //取详情
+    var rows = dom.getElementsByClassName('fed-deta-content')[0];
+    rows = rows.getElementsByClassName('fed-part-rows')[0];
+    apiDetailItemOne = ApiDetailItemOne(
+      starring: rows.children[0]
+          .getElementsByTagName('a')
+          .map((a) {
+            return a.text;
+          })
+          .join('\t'),
+      director:
+          // ignore: prefer_is_empty
+          rows.children[1].children.length > 0
+              ? rows.children[1].children[1].text
+              : '未知',
+      classify: rows.children[2].children[1].text,
+      region: rows.children[3].children[1].text,
+      year: rows.children[4].children[1].text,
+    );
+    //取选集，剧情介绍
+    var deta = dom.getElementsByClassName('fed-conv-deta')[0];
+    apiDetailItemTwo = ApiDetailItemTwo(
+      describes: deta.getElementsByClassName('fed-conv-text')[0].text,
+      tags: [],
+    );
+    //选集
+    var tagArr = deta.children[0].children[0].getElementsByTagName('a');
+    var tagUrlArr =
+        deta.children[0].children[1].getElementsByClassName('fed-tabs-foot')[0];
+    //tag
+    for (var i = 0; i < tagArr.length; i++) {
+      var val = ApiDetailItemTwoTag(tag: tagArr[i].text, jishu: []);
+      //tag包含的集数
+      var aArr = tagUrlArr.children[i].getElementsByTagName('a');
+      for (var a in aArr) {
+        var jishu = ApiDetailItemTwoTagJishu(
+          name: a.text,
+          url: a.attributes['href'] ?? '--',
+        );
+        val.jishu.add(jishu);
+      }
+      apiDetailItemTwo.tags.add(val);
+    }
+  }
+  static Future<ApiDetailOne> getData(String url) async {
+    var res = await Yrequest(url: "${Yrequest.url_}/$url").then();
+    return ApiDetailOne(res.body);
+  }
+}
+
+class ApiDetailItemOne {
+  final String starring;
+  final String director;
+  final String classify;
+  final String year;
+  final String region;
+
+  ApiDetailItemOne({
+    required this.director,
+    required this.classify,
+    required this.year,
+    required this.starring,
+    required this.region,
+  });
+}
+
+//0包含1、2
+class ApiDetailItemTwo {
+  final String describes;
+  final List<ApiDetailItemTwoTag> tags;
+
+  ApiDetailItemTwo({required this.describes, required this.tags});
+}
+
+//1包含2
+class ApiDetailItemTwoTag {
+  final String tag;
+  final List<ApiDetailItemTwoTagJishu> jishu;
+
+  ApiDetailItemTwoTag({required this.tag, required this.jishu});
+}
+
+//2
+class ApiDetailItemTwoTagJishu {
+  final String name;
+  final String url;
+  ApiDetailItemTwoTagJishu({required this.name, required this.url});
 }
