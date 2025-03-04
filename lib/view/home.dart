@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hanjutv/api/api_home.dart';
 import 'package:hanjutv/component/ycard.dart';
+import 'package:hanjutv/view/detail/detail_one.dart';
 
 class ViewHome extends StatefulWidget {
   const ViewHome({super.key});
@@ -32,7 +33,7 @@ class _ViewHomeState extends State<ViewHome> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
-          padding: EdgeInsets.all(speed + 6),
+          padding: EdgeInsets.only(left: speed, right: speed),
           height: MediaQuery.of(context).size.height,
           child:
               listycar.isEmpty
@@ -40,35 +41,54 @@ class _ViewHomeState extends State<ViewHome> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SpinKitRotatingCircle(
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                        ),
-                        // SpinKitDualRing(
+                        // SpinKitRotatingCircle(
                         //   color: Theme.of(context).colorScheme.primaryContainer,
-                        //   size: 40,
                         // ),
+                        SpinKitDualRing(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          size: 40,
+                        ),
                         SizedBox(height: 20),
                         Text("loding..."),
                       ],
                     ),
                   )
-                  : GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 3 / 5,
-                      crossAxisCount:
-                          constraints.minWidth <= 500
-                              ? 2
-                              : constraints.maxWidth <= 800
-                              ? 3
-                              : constraints.maxWidth <= 1500
-                              ? 5
-                              : 6, // 每行显示的列数
-                      crossAxisSpacing: speed,
-                      mainAxisSpacing: speed,
-                    ),
-                    itemCount: listycar.length, // 网格项数量
-                    itemBuilder:
-                        (context, index) => Ycard(item: listycar[index]),
+                  : Column(
+                    children: [
+                      SizedBox(height: speed),
+                      Expanded(
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio: 3 / 5,
+                                crossAxisCount:
+                                    constraints.minWidth <= 500
+                                        ? 2
+                                        : constraints.maxWidth <= 800
+                                        ? 3
+                                        : constraints.maxWidth <= 1500
+                                        ? 5
+                                        : 6, // 每行显示的列数
+                                crossAxisSpacing: speed,
+                                mainAxisSpacing: speed,
+                              ),
+                          itemCount: listycar.length, // 网格项数量
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailOne(yCardITem: listycar[index]),
+                                  ),
+                                );
+                              },
+                              child: Ycard(item: listycar[index]),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
         );
       },

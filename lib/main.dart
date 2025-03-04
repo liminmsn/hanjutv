@@ -1,13 +1,14 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:hanjutv/view/home.dart';
 import 'package:hanjutv/view/like.dart';
-import 'dart:io';
 
 void main() {
   runApp(const MyApp());
 
+  //windows平台
   if (Platform.isWindows) {
     doWhenWindowReady(() {
       final win = appWindow;
@@ -17,6 +18,7 @@ void main() {
       win.show();
     });
   }
+  //macos平台
 }
 
 class MyApp extends StatelessWidget {

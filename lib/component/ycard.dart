@@ -20,6 +20,31 @@ class Ycard extends StatelessWidget {
                   width: double.infinity,
                   height: double.infinity,
                 ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: EdgeInsets.only(top: 2, bottom: 2),
+                    color: Colors.black.withAlpha(100),
+                    child: Text(
+                      item.remarks,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 5,
+                  child: Text(
+                    item.score != 'null' ? item.score : '',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -30,6 +55,8 @@ class Ycard extends StatelessWidget {
             children: [
               Text(
                 item.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -47,6 +74,7 @@ class Ycard extends StatelessWidget {
                   ),
                 ),
               ),
+              Text(item.src),
             ],
           ),
         ),
