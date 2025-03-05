@@ -22,12 +22,14 @@ class _DetailOneState extends State<DetailOne> {
     describes: '--',
     tags: [],
   );
+  late List<ApiDetailItemThree> apiDetailItemThree = [];
 
   fetchData() {
     ApiDetailOne.getData(widget.yCardITem.src).then((res) {
       setState(() {
         apiDetailItemOne = res.apiDetailItemOne;
         apiDetailItemTwo = res.apiDetailItemTwo;
+        apiDetailItemThree = res.apiDetailItemThree;
       });
     });
   }
@@ -49,7 +51,7 @@ class _DetailOneState extends State<DetailOne> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(40),
+          padding: EdgeInsets.all(20),
           child: Flex(
             direction: Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +70,7 @@ class _DetailOneState extends State<DetailOne> {
                                 children: [
                                   Image.network(
                                     widget.yCardITem.pics,
-                                    height: 200,
+                                    height: MediaQuery.of(context).size.height * 0.3,
                                   ),
                                   Positioned(
                                     bottom: 0,
@@ -164,15 +166,41 @@ class _DetailOneState extends State<DetailOne> {
               ),
               SizedBox(width: 10),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.2,
+                width: MediaQuery.of(context).size.width * 0.25,
                 height: MediaQuery.of(context).size.height * 0.9,
                 child: Card(
                   child: ListView(
                     children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.star),
-                        title: Text('Item 1'),
-                      ),
+                      for (var item in apiDetailItemThree)
+                        ListTile(
+                          leading: Container(
+                            padding: EdgeInsets.only(
+                              left: 10,
+                              right: 10,
+                              top: 5,
+                              bottom: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: getColor(int.parse(item.idx)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4),
+                              ),
+                            ),
+                            child: Text(
+                              item.idx,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                            ),
+                          ),
+                          title: Text(
+                            item.name,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
                       // Add more ListTiles as needed
                     ],
                   ),
@@ -183,6 +211,13 @@ class _DetailOneState extends State<DetailOne> {
         ),
       ),
     );
+  }
+
+  Color getColor(int val) {
+    if (val == 1) return Colors.red;
+    if (val == 2) return Colors.orange;
+    if (val == 3) return Colors.yellow;
+    return Colors.grey;
   }
 }
 
@@ -244,11 +279,10 @@ class _YAnalectaState extends State<YAnalecta> {
         ),
         SizedBox(height: 10),
         SizedBox(
-          // width: 200,
-          height: 300,
+          height: (MediaQuery.of(context).size.height * 0.358),
           child: GridView.count(
             childAspectRatio: 5 / 2.3,
-            crossAxisCount: 8,
+            crossAxisCount: 7,
             children: List.generate(
               widget.apiDetailItemTwo.tags.isNotEmpty
                   ? widget.apiDetailItemTwo.tags[selectIdx_].jishu.length
