@@ -57,7 +57,7 @@ class ApiDetailOne {
         .getElementsByTagName('a');
     for (var element in aArr) {
       var item = ApiDetailItemThree(
-        name: element.nodes.last.toString(),
+        name: element.nodes.last.toString().replaceAll('"', ''),
         idx: element.children[0].text,
         url: element.attributes['href'] ?? 'null',
       );

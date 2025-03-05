@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hanjutv/api/api_detail_one.dart';
 import 'package:hanjutv/api/api_home.dart';
@@ -42,6 +44,8 @@ class _DetailOneState extends State<DetailOne> {
 
   @override
   Widget build(BuildContext context) {
+    final titleSize = MediaQuery.of(context).size.height * 0.05;
+    final h3Size = MediaQuery.of(context).size.height * 0.022;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -49,42 +53,160 @@ class _DetailOneState extends State<DetailOne> {
         },
         child: Icon(Icons.reply),
       ),
-      body: SingleChildScrollView(
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Flex(
-            direction: Axis.horizontal,
+          padding: EdgeInsets.all(4),
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Expanded(
-                  child: Column(
-                    children: [
-                      Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Row(
-                            children: [
-                              Stack(
+                flex: 4,
+                child: Flex(
+                  direction: Axis.vertical,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: FractionallySizedBox(
+                        widthFactor: 1,
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(h3Size),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: 300),
+                              child: Flex(
+                                direction: Axis.horizontal,
                                 children: [
-                                  Image.network(
-                                    widget.yCardITem.pics,
-                                    height: MediaQuery.of(context).size.height * 0.3,
+                                  Image.network(widget.yCardITem.pics),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(h3Size),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            widget.yCardITem.title,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: titleSize,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            '演员：${apiDetailItemOne.starring}',
+                                            maxLines: 4,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: h3Size),
+                                          ),
+                                          Text(
+                                            '导演：${apiDetailItemOne.director}',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: h3Size),
+                                          ),
+                                          Text(
+                                            '类型：${apiDetailItemOne.classify}',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: h3Size),
+                                          ),
+                                          Text(
+                                            '年份：${apiDetailItemOne.year}',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: h3Size),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  Positioned(
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
+                                  Expanded(
+                                    flex: 1,
+                                    child: Center(
+                                      child: Text(
+                                        '区域：${apiDetailItemOne.region}',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: h3Size * 1.2,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: FractionallySizedBox(
+                        widthFactor: 1,
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(h3Size),
+                            child: Column(
+                              children: [
+                                YToggleLabel(
+                                  h3Size: h3Size,
+                                  labelArr: ["选集播放", "视频介绍"],
+                                  widgetArr: [
+                                    YAnalecta(
+                                      h3Size: h3Size,
+                                      apiDetailItemTwo: apiDetailItemTwo,
+                                    ),
+                                    YDescribes(
+                                      h3Size: h3Size,
+                                      apiDetailItemTwo: apiDetailItemTwo,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: FractionallySizedBox(
+                  heightFactor: 1,
+                  child: Card(
+                    child: ListView.builder(
+                      itemCount: apiDetailItemThree.length,
+                      itemBuilder: (context, index) {
+                        return ListBody(
+                          children: [
+                            ListTile(
+                              title: Row(
+                                children: [
+                                  Transform.rotate(
+                                    angle: 0,
+                                    // Random().nextDouble() > 0.5
+                                    //     ? 0.1
+                                    //     : -0.1,
                                     child: Container(
                                       padding: EdgeInsets.only(
-                                        top: 2,
-                                        bottom: 2,
+                                        left: 10,
+                                        right: 10,
                                       ),
-                                      color: Colors.black.withAlpha(100),
+                                      decoration: BoxDecoration(
+                                        color: getColor(index),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(h3Size * 0.1),
+                                        ),
+                                      ),
                                       child: Text(
-                                        widget.yCardITem.remarks,
-                                        textAlign: TextAlign.center,
+                                        apiDetailItemThree[index].idx,
                                         style: TextStyle(
                                           color:
                                               Theme.of(
@@ -94,115 +216,21 @@ class _DetailOneState extends State<DetailOne> {
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              SizedBox(width: 20),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      widget.yCardITem.title,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      apiDetailItemThree[index].name,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: h3Size),
                                     ),
-                                    SizedBox(height: 10),
-                                    Text('主演：${apiDetailItemOne.starring}'),
-                                    SizedBox(height: 4),
-                                    Text('导演：${apiDetailItemOne.director}'),
-                                    SizedBox(height: 4),
-                                    Text('分类：${apiDetailItemOne.classify}'),
-                                    SizedBox(height: 4),
-                                    Text('年份：${apiDetailItemOne.year}'),
-                                    SizedBox(height: 10),
-                                    Padding(
-                                      padding: EdgeInsets.all(20),
-                                      child: ElevatedButton(
-                                        onPressed: () {},
-                                        child: Text("立即播放"),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    Text("地区: ${apiDetailItemOne.region}"),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Card(
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              YToggleLabel(
-                                labelArr: ['选集播放', '剧情介绍'],
-                                widgetArr: [
-                                  YAnalecta(apiDetailItemTwo: apiDetailItemTwo),
-                                  YDescribes(
-                                    apiDetailItemTwo: apiDetailItemTwo,
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(width: 10),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
-                height: MediaQuery.of(context).size.height * 0.9,
-                child: Card(
-                  child: ListView(
-                    children: <Widget>[
-                      for (var item in apiDetailItemThree)
-                        ListTile(
-                          leading: Container(
-                            padding: EdgeInsets.only(
-                              left: 10,
-                              right: 10,
-                              top: 5,
-                              bottom: 5,
                             ),
-                            decoration: BoxDecoration(
-                              color: getColor(int.parse(item.idx)),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(4),
-                              ),
-                            ),
-                            child: Text(
-                              item.idx,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                          ),
-                          title: Text(
-                            item.name,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      // Add more ListTiles as needed
-                    ],
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -224,18 +252,29 @@ class _DetailOneState extends State<DetailOne> {
 //影片介绍
 class YDescribes extends StatelessWidget {
   final ApiDetailItemTwo apiDetailItemTwo;
-  const YDescribes({super.key, required this.apiDetailItemTwo});
+  final double h3Size;
+  const YDescribes({
+    super.key,
+    required this.apiDetailItemTwo,
+    required this.h3Size,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Text(apiDetailItemTwo.describes);
+    // context.widget.
+    return Text(apiDetailItemTwo.describes, style: TextStyle(fontSize: h3Size));
   }
 }
 
 //选集播放
 class YAnalecta extends StatefulWidget {
   final ApiDetailItemTwo apiDetailItemTwo;
-  const YAnalecta({super.key, required this.apiDetailItemTwo});
+  final double h3Size;
+  const YAnalecta({
+    super.key,
+    required this.apiDetailItemTwo,
+    required this.h3Size,
+  });
 
   @override
   State<YAnalecta> createState() => _YAnalectaState();
@@ -256,7 +295,7 @@ class _YAnalectaState extends State<YAnalecta> {
             children: <Widget>[
               for (var i = 0; i < widget.apiDetailItemTwo.tags.length; i++)
                 Padding(
-                  padding: EdgeInsets.only(right: 2),
+                  padding: EdgeInsets.only(right: 5),
                   child: InkWell(
                     onTap: () {
                       setState(() {
@@ -277,37 +316,45 @@ class _YAnalectaState extends State<YAnalecta> {
             ],
           ),
         ),
-        SizedBox(height: 10),
         SizedBox(
-          height: (MediaQuery.of(context).size.height * 0.358),
-          child: GridView.count(
-            childAspectRatio: 5 / 2.3,
-            crossAxisCount: 7,
-            children: List.generate(
-              widget.apiDetailItemTwo.tags.isNotEmpty
-                  ? widget.apiDetailItemTwo.tags[selectIdx_].jishu.length
-                  : 0,
-              (idx) {
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      selectIdx_two = idx;
-                    });
-                  },
-                  child: Chip(
-                    side:
-                        selectIdx_two == idx
-                            ? BorderSide(
-                              color: Theme.of(context).colorScheme.primary,
-                            )
-                            : null,
-                    label: Text(
-                      widget.apiDetailItemTwo.tags[selectIdx_].jishu[idx].name,
-                      // style: TextStyle(fontSize: 10),
+          height: MediaQuery.of(context).size.height * 0.44,
+          child: Expanded(
+            child: GridView(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 0,
+                childAspectRatio: 4 / 2,
+              ),
+              children: List.generate(
+                widget.apiDetailItemTwo.tags.isNotEmpty
+                    ? widget.apiDetailItemTwo.tags[selectIdx_].jishu.length
+                    : 0,
+                (idx) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectIdx_two = idx;
+                      });
+                    },
+                    child: Card(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      child: Center(
+                        child: Align(
+                          child: Text(
+                            widget
+                                .apiDetailItemTwo
+                                .tags[selectIdx_]
+                                .jishu[idx]
+                                .name,
+                            style: TextStyle(fontSize: widget.h3Size),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -320,10 +367,12 @@ class _YAnalectaState extends State<YAnalecta> {
 class YToggleLabel extends StatefulWidget {
   final List<String> labelArr;
   final List<Widget> widgetArr;
+  final double h3Size;
   const YToggleLabel({
     super.key,
     required this.labelArr,
     required this.widgetArr,
+    required this.h3Size,
   });
 
   @override
@@ -352,7 +401,7 @@ class _ToggleLabelState extends State<YToggleLabel> {
                   child: Text(
                     widget.labelArr[i],
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: widget.h3Size,
                       fontWeight: FontWeight.bold,
                       color:
                           selectIdx == i
