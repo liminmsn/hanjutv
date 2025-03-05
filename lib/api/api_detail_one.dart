@@ -4,6 +4,7 @@ import 'package:html/parser.dart';
 class ApiDetailOne {
   late ApiDetailItemOne apiDetailItemOne;
   late ApiDetailItemTwo apiDetailItemTwo;
+  late List<ApiDetailItemThree> apiDetailItemThree = [];
   ApiDetailOne(String body) {
     var dom = parse(body);
     //取详情
@@ -31,14 +32,14 @@ class ApiDetailOne {
       describes: deta.getElementsByClassName('fed-conv-text')[0].text,
       tags: [],
     );
-    //选集
+    //------选集
     var tagArr = deta.children[0].children[0].getElementsByTagName('a');
     var tagUrlArr =
         deta.children[0].children[1].getElementsByClassName('fed-tabs-foot')[0];
-    //tag
+    //------tag
     for (var i = 0; i < tagArr.length; i++) {
       var val = ApiDetailItemTwoTag(tag: tagArr[i].text, jishu: []);
-      //tag包含的集数
+      //----tag包含的集数
       var aArr = tagUrlArr.children[i].getElementsByTagName('a');
       for (var a in aArr) {
         var jishu = ApiDetailItemTwoTagJishu(
@@ -48,6 +49,19 @@ class ApiDetailOne {
         val.jishu.add(jishu);
       }
       apiDetailItemTwo.tags.add(val);
+    }
+    //取推荐列表
+    var aArr = dom
+        .getElementsByClassName('fed-side-list')[0]
+        .getElementsByTagName('ul')[0]
+        .getElementsByTagName('a');
+    for (var element in aArr) {
+      var item = ApiDetailItemThree(
+        name: element.nodes.last.toString(),
+        idx: element.children[0].text,
+        url: element.attributes['href'] ?? 'null',
+      );
+      apiDetailItemThree.add(item);
     }
   }
   static Future<ApiDetailOne> getData(String url) async {
@@ -69,6 +83,18 @@ class ApiDetailItemOne {
     required this.year,
     required this.starring,
     required this.region,
+  });
+}
+
+class ApiDetailItemThree {
+  final String name;
+  final String idx;
+  final String url;
+
+  ApiDetailItemThree({
+    required this.name,
+    required this.idx,
+    required this.url,
   });
 }
 
