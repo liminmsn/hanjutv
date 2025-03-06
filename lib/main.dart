@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:hanjutv/view/home.dart';
-import 'package:hanjutv/view/like.dart';
+import 'package:hanjutv/view/movie.dart';
+import 'package:hanjutv/view/tv_drama.dart';
+import 'package:hanjutv/view/about.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,7 +57,7 @@ class _MyAppCenterState extends State<MyAppCenter> {
     super.initState();
   }
 
-  final List<Widget> viewList = [ViewHome(), ViewLike(), ViewLike()];
+  final List<Widget> viewList = [ViewHome(), TvDrama(), Movie(),About()];
   final List<NavIcon> iconList = [
     NavIcon(
       '热播推荐',
@@ -71,6 +73,11 @@ class _MyAppCenterState extends State<MyAppCenter> {
       '电影',
       icon: Icons.movie_filter_outlined,
       selectIcon: Icons.movie_filter,
+    ),
+    NavIcon(
+      '关于',
+      icon: Icons.info_outline,
+      selectIcon: Icons.info,
     ),
   ];
 
