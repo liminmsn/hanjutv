@@ -377,6 +377,8 @@ class _YAnalectaState extends State<YAnalecta> {
                     child: Center(
                       child: Align(
                         child: Text(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           widget
                               .apiDetailItemTwo
                               .tags[selectIdx_]
