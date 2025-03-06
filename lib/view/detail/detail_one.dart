@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hanjutv/api/api_detail_one.dart';
 import 'package:hanjutv/api/api_home.dart';
@@ -34,6 +32,27 @@ class _DetailOneState extends State<DetailOne> {
         apiDetailItemThree = res.apiDetailItemThree;
       });
     });
+  }
+
+  // TODO:播放事件
+  openPlay(ApiDetailItemTwoTagJishu ji) {
+    // showDialog(
+    //   context: context,
+    //   builder: (context) {
+    //     return AlertDialog(
+    //       title: Text(ji.name),
+    //       content: Text(ji.url),
+    //       actions: <Widget>[
+    //         TextButton(
+    //           onPressed: () {
+    //             Navigator.of(context).pop();
+    //           },
+    //           child: Text('Close'),
+    //         ),
+    //       ],
+    //     );
+    //   },
+    // );
   }
 
   @override
@@ -120,6 +139,18 @@ class _DetailOneState extends State<DetailOne> {
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(fontSize: h3Size),
                                           ),
+                                          Spacer(),
+                                          if (apiDetailItemTwo.tags.isNotEmpty)
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                openPlay(
+                                                  apiDetailItemTwo
+                                                      .tags[0]
+                                                      .jishu[0],
+                                                );
+                                              },
+                                              child: Text("立即播放"),
+                                            ),
                                         ],
                                       ),
                                     ),
@@ -160,6 +191,7 @@ class _DetailOneState extends State<DetailOne> {
                                     YAnalecta(
                                       h3Size: h3Size,
                                       apiDetailItemTwo: apiDetailItemTwo,
+                                      openPlay: openPlay,
                                     ),
                                     YDescribes(
                                       h3Size: h3Size,
@@ -270,10 +302,12 @@ class YDescribes extends StatelessWidget {
 class YAnalecta extends StatefulWidget {
   final ApiDetailItemTwo apiDetailItemTwo;
   final double h3Size;
+  final Function(ApiDetailItemTwoTagJishu ji) openPlay;
   const YAnalecta({
     super.key,
     required this.apiDetailItemTwo,
     required this.h3Size,
+    required this.openPlay,
   });
 
   @override
@@ -282,14 +316,15 @@ class YAnalecta extends StatefulWidget {
 
 class _YAnalectaState extends State<YAnalecta> {
   late int selectIdx_ = 0;
-  late int selectIdx_two = 0;
+  late int selectIdxTwo = 0;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SizedBox(
-          height: 40,
+          // height: 40,
+          height: MediaQuery.of(context).size.height * 0.06,
           child: ListView(
             scrollDirection: Axis.horizontal, // 设置滚动方向为水平
             children: <Widget>[
@@ -316,45 +351,54 @@ class _YAnalectaState extends State<YAnalecta> {
             ],
           ),
         ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.44,
-          child: Expanded(
-            child: GridView(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-                mainAxisSpacing: 0,
-                crossAxisSpacing: 0,
-                childAspectRatio: 4 / 2,
-              ),
-              children: List.generate(
-                widget.apiDetailItemTwo.tags.isNotEmpty
-                    ? widget.apiDetailItemTwo.tags[selectIdx_].jishu.length
-                    : 0,
-                (idx) {
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectIdx_two = idx;
-                      });
-                    },
-                    child: Card(
-                      color: Theme.of(context).colorScheme.primaryContainer,
-                      child: Center(
-                        child: Align(
-                          child: Text(
-                            widget
-                                .apiDetailItemTwo
-                                .tags[selectIdx_]
-                                .jishu[idx]
-                                .name,
-                            style: TextStyle(fontSize: widget.h3Size),
-                          ),
+        ConstrainedBox(
+          // height: MediaQuery.of(context).size.height * 0.4,
+          constraints: BoxConstraints(
+            maxHeight:
+                MediaQuery.of(context).size.height * 0.5 -
+                MediaQuery.of(context).size.height * 0.08,
+          ),
+          child: GridView(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 7,
+              mainAxisSpacing: 0,
+              crossAxisSpacing: 0,
+              childAspectRatio: 4 / 2,
+            ),
+            children: List.generate(
+              widget.apiDetailItemTwo.tags.isNotEmpty
+                  ? widget.apiDetailItemTwo.tags[selectIdx_].jishu.length
+                  : 0,
+              (idx) {
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      selectIdxTwo = idx;
+                      widget.openPlay(
+                        widget.apiDetailItemTwo.tags[selectIdx_].jishu[selectIdxTwo],
+                      );
+                    });
+                  },
+                  child: Card(
+                    color:
+                        selectIdxTwo == idx
+                            ? Theme.of(context).colorScheme.primaryContainer
+                            : null,
+                    child: Center(
+                      child: Align(
+                        child: Text(
+                          widget
+                              .apiDetailItemTwo
+                              .tags[selectIdx_]
+                              .jishu[idx]
+                              .name,
+                          style: TextStyle(fontSize: widget.h3Size),
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ),

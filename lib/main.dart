@@ -12,7 +12,7 @@ void main() {
   if (Platform.isWindows) {
     doWhenWindowReady(() {
       final win = appWindow;
-      win.minSize = const Size(400, 600);
+      win.minSize = const Size(1000, 800);
       win.size = const Size(1200, 800);
       win.alignment = Alignment.center;
       win.show();
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreenAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.limeAccent),
         fontFamily: GoogleFonts.sigmar().fontFamily,
       ),
       darkTheme: ThemeData.dark(), // 深色主题（黑色主题）
@@ -50,7 +50,7 @@ class MyAppCenter extends StatefulWidget {
 class _MyAppCenterState extends State<MyAppCenter> {
   late int selectIdx = 0;
 
-  final List<Widget> viewList = [ViewHome(), ViewLike()];
+  final List<Widget> viewList = [ViewHome(), ViewLike(), ViewLike()];
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class _MyAppCenterState extends State<MyAppCenter> {
                 child: Row(
                   children: [
                     Container(
-                      width: constraints.minWidth >= 600 ? 150 : null,
+                      width: constraints.minWidth >= 600 ? 120 : null,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -89,7 +89,7 @@ class _MyAppCenterState extends State<MyAppCenter> {
                               size: 20,
                             ),
                             selectColor: selectColor,
-                            label: '首页',
+                            label: '推荐',
                           ),
                           NavigBtn(
                             active: selectIdx == 1,
@@ -99,10 +99,22 @@ class _MyAppCenterState extends State<MyAppCenter> {
                               color: selectColor,
                               size: 20,
                             ),
-                            label: '喜欢列表',
+                            label: '韩剧',
+                            selectColor: selectColor,
+                          ),
+                          NavigBtn(
+                            active: selectIdx == 2,
+                            icon: Icon(Icons.favorite_outline, size: 20),
+                            selectedIcon: Icon(
+                              Icons.favorite,
+                              color: selectColor,
+                              size: 20,
+                            ),
+                            label: '韩剧',
                             selectColor: selectColor,
                           ),
                         ],
+
                         selectedIndex: selectIdx,
                         onDestinationSelected: (value) {
                           setState(() => selectIdx = value);
