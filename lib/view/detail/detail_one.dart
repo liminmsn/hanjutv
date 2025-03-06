@@ -12,17 +12,8 @@ class DetailOne extends StatefulWidget {
 }
 
 class _DetailOneState extends State<DetailOne> {
-  late ApiDetailItemOne apiDetailItemOne = ApiDetailItemOne(
-    director: '--',
-    classify: '--',
-    year: '--',
-    starring: '--',
-    region: '--',
-  );
-  late ApiDetailItemTwo apiDetailItemTwo = ApiDetailItemTwo(
-    describes: '--',
-    tags: [],
-  );
+  late ApiDetailItemOne apiDetailItemOne = ApiDetailItemOne.init();
+  late ApiDetailItemTwo apiDetailItemTwo = ApiDetailItemTwo.init();
   late List<ApiDetailItemThree> apiDetailItemThree = [];
 
   fetchData() {
@@ -52,6 +43,7 @@ class _DetailOneState extends State<DetailOne> {
   Widget build(BuildContext context) {
     final titleSize = MediaQuery.of(context).size.height * 0.05;
     final h3Size = MediaQuery.of(context).size.height * 0.022;
+    final maxWidth = MediaQuery.of(context).size.width * 0.15;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -84,7 +76,23 @@ class _DetailOneState extends State<DetailOne> {
                               child: Flex(
                                 direction: Axis.horizontal,
                                 children: [
-                                  Image.network(widget.yCardITem.pics),
+                                  SizedBox(
+                                    child: Container(
+                                      child:
+                                          apiDetailItemOne.yCardITem.pics != ''
+                                              ? Image.network(
+                                                apiDetailItemOne.yCardITem.pics,
+                                                width: maxWidth,
+                                              )
+                                              : Container(
+                                                width: maxWidth,
+                                                color:
+                                                    Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
+                                              ),
+                                    ),
+                                  ),
                                   Expanded(
                                     flex: 2,
                                     child: Padding(
@@ -94,7 +102,7 @@ class _DetailOneState extends State<DetailOne> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            widget.yCardITem.title,
+                                            apiDetailItemOne.yCardITem.title,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(

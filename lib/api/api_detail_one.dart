@@ -1,3 +1,4 @@
+import 'package:hanjutv/api/api_home.dart';
 import 'package:hanjutv/net/yrequest.dart';
 import 'package:html/parser.dart';
 
@@ -10,7 +11,23 @@ class ApiDetailOne {
     //取详情
     var rows = dom.getElementsByClassName('fed-deta-content')[0];
     rows = rows.getElementsByClassName('fed-part-rows')[0];
+
+    var imgInfo = dom.getElementsByClassName('fed-deta-images')[0];
     apiDetailItemOne = ApiDetailItemOne(
+      yCardITem: YCardITem(
+        pics:
+            imgInfo.getElementsByTagName('a')[0].attributes['data-original'] ??
+            '',
+        score: '',
+        remarks: imgInfo.getElementsByClassName('fed-list-remarks')[0].text,
+        title:
+            rows
+                .getElementsByClassName('fed-part-eone')[0]
+                .getElementsByTagName('a')[0]
+                .text,
+        desc: '',
+        src: '',
+      ),
       starring: rows.children[0]
           .getElementsByTagName('a')
           .map((a) {
@@ -18,8 +35,7 @@ class ApiDetailOne {
           })
           .join('\t'),
       director:
-          // ignore: prefer_is_empty
-          rows.children[1].getElementsByTagName('a').length > 0
+          rows.children[1].getElementsByTagName('a').isNotEmpty
               ? rows.children[1].children[1].text
               : rows.children[1].nodes[1].toString().replaceAll('"', ''),
       classify: rows.children[2].children[1].text,
@@ -71,6 +87,7 @@ class ApiDetailOne {
 }
 
 class ApiDetailItemOne {
+  final YCardITem yCardITem;
   final String starring;
   final String director;
   final String classify;
@@ -78,12 +95,24 @@ class ApiDetailItemOne {
   final String region;
 
   ApiDetailItemOne({
+    required this.yCardITem,
     required this.director,
     required this.classify,
     required this.year,
     required this.starring,
     required this.region,
   });
+
+  static init() {
+    return ApiDetailItemOne(
+      yCardITem: YCardITem.init(),
+      director: '--',
+      classify: '--',
+      year: '--',
+      starring: '--',
+      region: '--',
+    );
+  }
 }
 
 class ApiDetailItemThree {
@@ -104,6 +133,10 @@ class ApiDetailItemTwo {
   final List<ApiDetailItemTwoTag> tags;
 
   ApiDetailItemTwo({required this.describes, required this.tags});
+
+  static init() {
+    return ApiDetailItemTwo(describes: '--', tags: []);
+  }
 }
 
 //1包含2

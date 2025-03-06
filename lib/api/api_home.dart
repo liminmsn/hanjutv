@@ -56,4 +56,15 @@ class YCardITem {
     required this.desc,
     required this.src,
   });
+
+  static init() {
+    return YCardITem(
+      pics: '',
+      score: '',
+      remarks: '--',
+      title: '--',
+      desc: '',
+      src: '',
+    );
+  }
 }
