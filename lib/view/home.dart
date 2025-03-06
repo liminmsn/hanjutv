@@ -65,7 +65,7 @@ class _ViewHomeState extends State<ViewHome> {
                                     constraints.minWidth <= 500
                                         ? 2
                                         : constraints.maxWidth <= 800
-                                        ? 3
+                                        ? 4
                                         : constraints.maxWidth <= 1500
                                         ? 5
                                         : 6, // 每行显示的列数
