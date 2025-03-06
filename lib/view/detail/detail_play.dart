@@ -134,8 +134,7 @@ class _DetailPlayState extends State<DetailPlay> {
                             ),
                           ),
                           Spacer(),
-                          if (_controller.value.isBuffering ||
-                              !_controller.value.isInitialized)
+                          if (_controller.value.isInitialized == false)
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
