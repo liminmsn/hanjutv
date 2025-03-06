@@ -79,6 +79,31 @@ class PlayItem {
     required this.sid,
     required this.nid,
   });
+
+  static init() {
+    return PlayItem(
+      flag: '',
+      encrypt: 0,
+      trysee: 0,
+      points: 0,
+      link: '',
+      linkNext: '',
+      vodData: VodData(
+        vodName: '',
+        vodActor: '',
+        vodDirector: '',
+        vodClass: '',
+      ),
+      url: '',
+      urlNext: '',
+      from: '',
+      server: '',
+      note: '',
+      id: '',
+      sid: 0,
+      nid: 0,
+    );
+  }
 }
 
 class VodData {
