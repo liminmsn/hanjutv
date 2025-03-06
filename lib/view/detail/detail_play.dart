@@ -15,8 +15,6 @@ class DetailPlay extends StatefulWidget {
   State<DetailPlay> createState() => _DetailPlayState();
 }
 
-const TextStyle textWhite = TextStyle(color: Colors.white);
-
 class _DetailPlayState extends State<DetailPlay> {
   //初始化视频对象
   late PlayItem playItem = PlayItem.init();
@@ -77,166 +75,178 @@ class _DetailPlayState extends State<DetailPlay> {
 
   @override
   Widget build(BuildContext context) {
+    final iconSize = MediaQuery.of(context).size.height * 0.04;
+    final labelSize = MediaQuery.of(context).size.height * 0.018;
+    final labelWidth = MediaQuery.of(context).size.height * 0.08;
+    final TextStyle textWhite = TextStyle(
+      color: Colors.white,
+      fontSize: labelSize,
+    );
     return Scaffold(
-      body: Container(
-        color: Colors.black,
-        child: GestureDetector(
-          onTap: () {
-            setState(() => showCont = !showCont);
-          },
-          child: Stack(
-            children: [
-              FractionallySizedBox(
-                heightFactor: 1,
-                widthFactor: 1,
-                child: Align(
-                  child: AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Container(
+            color: Colors.black,
+            child: GestureDetector(
+              onTap: () {
+                setState(() => showCont = !showCont);
+              },
+              child: Stack(
+                children: [
+                  FractionallySizedBox(
+                    heightFactor: 1,
+                    widthFactor: 1,
+                    child: Align(
+                      child: AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              if (showCont)
-                Positioned(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Flex(
-                          direction: Axis.horizontal,
-                          children: [
+                  if (showCont)
+                    Positioned(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Flex(
+                              direction: Axis.horizontal,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    //返回就销毁视频、进度条控制器
+                                    _controller.dispose();
+                                    _videoProgressNotifier.dispose();
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.white,
+                                    size: iconSize,
+                                  ),
+                                ),
+                                if (playItem.vodData.vodName != '')
+                                  Text(
+                                    '${playItem.vodData.vodName} ${widget.playJi.name}',
+                                    style: textWhite,
+                                  ),
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          if (_controller.value.isBuffering ||
+                              !_controller.value.isInitialized)
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SpinKitDualRing(
+                                  color:
+                                      Theme.of(
+                                        context,
+                                      ).colorScheme.primaryContainer,
+                                  size: 40,
+                                ),
+                                SizedBox(height: 20),
+                                Text("loding...", style: textWhite),
+                              ],
+                            ),
+                          if (_controller.value.isInitialized &&
+                              _controller.value.isBuffering == false &&
+                              showCont)
                             IconButton(
                               onPressed: () {
-                                Navigator.pop(context);
-                                //返回就销毁视频、进度条控制器
-                                _controller.dispose();
-                                _videoProgressNotifier.dispose();
+                                if (_controller.value.isPlaying) {
+                                  _controller.pause();
+                                } else {
+                                  _controller.play();
+                                }
+                                setState(() => isPlay = !isPlay);
                               },
                               icon: Icon(
-                                Icons.arrow_back,
+                                isPlay ? Icons.pause_circle : Icons.play_circle,
                                 color: Colors.white,
-                                // size: 40,
+                                size: iconSize * 3,
                               ),
                             ),
-                            if (playItem.vodData.vodName != '')
-                              Text(
-                                '${playItem.vodData.vodName} ${widget.playJi.name}',
-                                style: textWhite,
-                              ),
-                          ],
-                        ),
+                          Spacer(),
+                          // 显示进度条
+                          if (showCont)
+                            ValueListenableBuilder<Duration>(
+                              valueListenable: _videoProgressNotifier,
+                              builder: (context, currentPosition, _) {
+                                final duration = _controller.value.duration;
+                                final progress =
+                                    duration == Duration.zero
+                                        ? 0.0
+                                        : currentPosition.inSeconds /
+                                            duration.inSeconds;
+                                return Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Flex(
+                                    direction: Axis.horizontal,
+                                    children: [
+                                      SizedBox(
+                                        width: labelWidth,
+                                        child: Text(
+                                          currentPosition
+                                              .toString()
+                                              .split('.')
+                                              .first,
+                                          style: textWhite,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Slider(
+                                          value: progress,
+                                          min: 0.0,
+                                          max: 1.0,
+                                          onChanged: (value) {
+                                            var newPosition = Duration(
+                                              seconds:
+                                                  (value * duration.inSeconds)
+                                                      .toInt(),
+                                            );
+                                            _onSliderChanged(newPosition);
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: labelWidth,
+                                        child: Text(
+                                          duration.toString().split('.').first,
+                                          style: textWhite,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          if (isFull) {
+                                            appWindow.restore(); // 最小化窗口
+                                          } else {
+                                            appWindow.maximize();
+                                          }
+                                          setState(() => isFull = !isFull);
+                                        },
+                                        icon: Icon(
+                                          isFull
+                                              ? Icons.fullscreen_exit
+                                              : Icons.fullscreen,
+                                          size: iconSize,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                        ],
                       ),
-                      Spacer(),
-                      if (_controller.value.isBuffering ||
-                          !_controller.value.isInitialized)
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SpinKitDualRing(
-                              color:
-                                  Theme.of(
-                                    context,
-                                  ).colorScheme.primaryContainer,
-                              size: 40,
-                            ),
-                            SizedBox(height: 20),
-                            Text("loding...", style: textWhite),
-                          ],
-                        ),
-                      if (_controller.value.isInitialized &&
-                          _controller.value.isBuffering == false &&
-                          showCont)
-                        IconButton(
-                          onPressed: () {
-                            if (_controller.value.isPlaying) {
-                              _controller.pause();
-                            } else {
-                              _controller.play();
-                            }
-                            setState(() => isPlay = !isPlay);
-                          },
-                          icon: Icon(
-                            isPlay ? Icons.pause_circle : Icons.play_circle,
-                            color: Colors.white,
-                            size: 80,
-                          ),
-                        ),
-                      Spacer(),
-                      // 显示进度条
-                      if (showCont)
-                        ValueListenableBuilder<Duration>(
-                          valueListenable: _videoProgressNotifier,
-                          builder: (context, currentPosition, _) {
-                            final duration = _controller.value.duration;
-                            final progress =
-                                duration == Duration.zero
-                                    ? 0.0
-                                    : currentPosition.inSeconds /
-                                        duration.inSeconds;
-                            return Padding(
-                              padding: EdgeInsets.only(left: 10, right: 10),
-                              child: Flex(
-                                direction: Axis.horizontal,
-                                children: [
-                                  SizedBox(
-                                    width: 60,
-                                    child: Text(
-                                      currentPosition
-                                          .toString()
-                                          .split('.')
-                                          .first,
-                                      style: textWhite,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Slider(
-                                      value: progress,
-                                      min: 0.0,
-                                      max: 1.0,
-                                      onChanged: (value) {
-                                        var newPosition = Duration(
-                                          seconds:
-                                              (value * duration.inSeconds)
-                                                  .toInt(),
-                                        );
-                                        _onSliderChanged(newPosition);
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 60,
-                                    child: Text(
-                                      duration.toString().split('.').first,
-                                      style: textWhite,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      if (isFull) {
-                                        appWindow.restore(); // 最小化窗口
-                                      } else {
-                                        appWindow.maximize();
-                                      }
-                                      setState(() => isFull = !isFull);
-                                    },
-                                    icon: Icon(
-                                      isFull
-                                          ? Icons.fullscreen_exit
-                                          : Icons.fullscreen,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
