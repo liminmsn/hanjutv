@@ -47,32 +47,19 @@ class MyAppCenter extends StatefulWidget {
 }
 
 //主程序state
-class _MyAppCenterState extends State<MyAppCenter>
-    with SingleTickerProviderStateMixin {
+class _MyAppCenterState extends State<MyAppCenter> {
   late int selectIdx = 0;
-
-  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 500),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   final List<Widget> viewList = [ViewHome(), ViewLike(), ViewLike()];
   final List<NavIcon> iconList = [
     NavIcon(
       '热播推荐',
-      icon: Icons.smart_display_outlined,
+      icon: Icons.new_releases_outlined,
       selectIcon: Icons.new_releases,
     ),
     NavIcon(
