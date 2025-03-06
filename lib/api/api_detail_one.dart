@@ -81,7 +81,7 @@ class ApiDetailOne {
     }
   }
   static Future<ApiDetailOne> getData(String url) async {
-    var res = await Yrequest(url: "${Yrequest.url_}/$url").then();
+    var res = await Yrequest(url: "${Yrequest.url_}$url").then();
     return ApiDetailOne(res.body);
   }
 }

@@ -57,7 +57,7 @@ class YCardITem {
     required this.src,
   });
 
-  static init() {
+  static YCardITem init() {
     return YCardITem(
       pics: '',
       score: '',

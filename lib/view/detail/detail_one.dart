@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hanjutv/api/api_detail_one.dart';
 import 'package:hanjutv/api/api_home.dart';
@@ -214,44 +216,64 @@ class _DetailOneState extends State<DetailOne> {
                         return ListBody(
                           children: [
                             ListTile(
-                              title: Row(
-                                children: [
-                                  Transform.rotate(
-                                    angle: 0,
-                                    // Random().nextDouble() > 0.5
-                                    //     ? 0.1
-                                    //     : -0.1,
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                        left: 10,
-                                        right: 10,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: getColor(index),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(h3Size * 0.1),
+                              title: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        var ycard = YCardITem.init();
+                                        ycard.src = apiDetailItemThree[index].url;
+                                        return DetailOne(yCardITem: ycard);
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    MouseRegion(
+                                      child: Transform.rotate(
+                                        angle:
+                                            Random().nextDouble() > 0.5
+                                                ? 0.1
+                                                : -0.1,
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: getColor(
+                                              int.parse(
+                                                apiDetailItemThree[index].idx,
+                                              ),
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(h3Size * 0.1),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            apiDetailItemThree[index].idx,
+                                            style: TextStyle(
+                                              color:
+                                                  Theme.of(
+                                                    context,
+                                                  ).colorScheme.onPrimary,
+                                            ),
+                                          ),
                                         ),
                                       ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
                                       child: Text(
-                                        apiDetailItemThree[index].idx,
-                                        style: TextStyle(
-                                          color:
-                                              Theme.of(
-                                                context,
-                                              ).colorScheme.onPrimary,
-                                        ),
+                                        apiDetailItemThree[index].name,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(fontSize: h3Size),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Expanded(
-                                    child: Text(
-                                      apiDetailItemThree[index].name,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: h3Size),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ],
