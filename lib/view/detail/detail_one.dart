@@ -79,21 +79,19 @@ class _DetailOneState extends State<DetailOne> {
                                 direction: Axis.horizontal,
                                 children: [
                                   SizedBox(
-                                    child: Container(
-                                      child:
-                                          apiDetailItemOne.yCardITem.pics != ''
-                                              ? Image.network(
-                                                apiDetailItemOne.yCardITem.pics,
-                                                width: maxWidth,
-                                              )
-                                              : Container(
-                                                width: maxWidth,
-                                                color:
-                                                    Theme.of(
-                                                      context,
-                                                    ).colorScheme.primary,
-                                              ),
-                                    ),
+                                    width: maxWidth,
+                                    height: maxWidth * 1.5,
+                                    child:
+                                        apiDetailItemOne.yCardITem.pics != ''
+                                            ? Image.network(
+                                              apiDetailItemOne.yCardITem.pics,
+                                            )
+                                            : Container(
+                                              color:
+                                                  Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary,
+                                            ),
                                   ),
                                   Expanded(
                                     flex: 2,
@@ -223,7 +221,8 @@ class _DetailOneState extends State<DetailOne> {
                                     MaterialPageRoute(
                                       builder: (context) {
                                         var ycard = YCardITem.init();
-                                        ycard.src = apiDetailItemThree[index].url;
+                                        ycard.src =
+                                            apiDetailItemThree[index].url;
                                         return DetailOne(yCardITem: ycard);
                                       },
                                     ),
