@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hanjutv/api/api_detail_one.dart';
 import 'package:hanjutv/api/api_home.dart';
-import 'package:hanjutv/api/api_play.dart';
+import 'package:hanjutv/view/detail/detail_play.dart';
 
 class DetailOne extends StatefulWidget {
   final YCardITem yCardITem;
@@ -35,26 +35,11 @@ class _DetailOneState extends State<DetailOne> {
     });
   }
 
-  // TODO:播放事件
   openPlay(ApiDetailItemTwoTagJishu ji) {
-    ApiPlay.getData(ji.url);
-    // showDialog(
-    //   context: context,
-    //   builder: (context) {
-    //     return AlertDialog(
-    //       title: Text(ji.name),
-    //       content: Text(ji.url),
-    //       actions: <Widget>[
-    //         TextButton(
-    //           onPressed: () {
-    //             Navigator.of(context).pop();
-    //           },
-    //           child: Text('Close'),
-    //         ),
-    //       ],
-    //     );
-    //   },
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DetailPlay(playJi: ji)),
+    );
   }
 
   @override
@@ -119,7 +104,7 @@ class _DetailOneState extends State<DetailOne> {
                                           ),
                                           Text(
                                             '演员：${apiDetailItemOne.starring}',
-                                            maxLines: 4,
+                                            maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(fontSize: h3Size),
                                           ),
@@ -377,7 +362,10 @@ class _YAnalectaState extends State<YAnalecta> {
                     setState(() {
                       selectIdxTwo = idx;
                       widget.openPlay(
-                        widget.apiDetailItemTwo.tags[selectIdx_].jishu[selectIdxTwo],
+                        widget
+                            .apiDetailItemTwo
+                            .tags[selectIdx_]
+                            .jishu[selectIdxTwo],
                       );
                     });
                   },

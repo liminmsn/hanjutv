@@ -40,8 +40,7 @@ class ApiPlay {
   }
   static Future<PlayItem?> getData(url) async {
     var res = await Yrequest(url: '${Yrequest.url_}/$url').then();
-    ApiPlay(res.body).playItem;
-    return null;
+    return ApiPlay(res.body).playItem;
   }
 }
 
