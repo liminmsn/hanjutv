@@ -11,6 +11,8 @@ class DetailPlay extends StatefulWidget {
   State<DetailPlay> createState() => _DetailPlayState();
 }
 
+const TextStyle textWhite = TextStyle(color: Colors.white);
+
 class _DetailPlayState extends State<DetailPlay> {
   late PlayItem playItem = PlayItem(
     flag: '',
@@ -32,25 +34,25 @@ class _DetailPlayState extends State<DetailPlay> {
   late VideoPlayerController _controller;
   late ValueNotifier<Duration> _videoProgressNotifier;
 
+  // 进度条拖动时更新视频的播放进度
+  void _onSliderChanged(Duration newPosition) {
+    _videoProgressNotifier.value = newPosition;
+    _controller.seekTo(newPosition);
+  }
+
   playHls(String url) {
     _controller = VideoPlayerController.networkUrl(Uri.parse(url))
       ..initialize().then((_) {
         setState(() {});
-        _controller.play(); // 初始化完成后自动播放
+        // 初始化完成后自动播放
+        _controller.play();
+        // 定期更新视频播放进度
+        _controller.addListener(() {
+          if (_controller.value.isInitialized && _controller.value.isPlaying) {
+            _videoProgressNotifier.value = _controller.value.position;
+          }
+        });
       });
-
-    // 定期更新视频播放进度
-    _controller.addListener(() {
-      if (_controller.value.isInitialized && _controller.value.isPlaying) {
-        _videoProgressNotifier.value = _controller.value.position;
-      }
-    });
-  }
-
-  // 进度条拖动时更新视频的播放进度
-  void _onSliderChanged(double value) {
-    final newPosition = Duration(seconds: value.toInt());
-    _controller.seekTo(newPosition);
   }
 
   @override
@@ -69,6 +71,12 @@ class _DetailPlayState extends State<DetailPlay> {
         playHls(playItem.url);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -92,10 +100,7 @@ class _DetailPlayState extends State<DetailPlay> {
                             children: [
                               CircularProgressIndicator(),
                               SizedBox(height: 10),
-                              Text(
-                                "奋力加载中...",
-                                style: TextStyle(color: Colors.white),
-                              ),
+                              Text("奋力加载中...", style: textWhite),
                             ],
                           ),
                 ),
@@ -110,22 +115,21 @@ class _DetailPlayState extends State<DetailPlay> {
                             IconButton(
                               onPressed: () {
                                 Navigator.pop(context);
+                                //返回就销毁视频、进度条控制器
                                 _controller.dispose();
                                 _videoProgressNotifier.dispose();
                               },
                               icon: Icon(
                                 Icons.arrow_back,
+                                color: Colors.white,
                                 // size: 40,
-                                color: Colors.white,
                               ),
                             ),
-                            Text(
-                              '${playItem.vodData.vodName} ${widget.playJi.name}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                // fontSize: 30,
+                            if (playItem.vodData.vodName != '')
+                              Text(
+                                '${playItem.vodData.vodName} ${widget.playJi.name}',
+                                style: textWhite,
                               ),
-                            ),
                           ],
                         ),
                       ),
@@ -140,28 +144,42 @@ class _DetailPlayState extends State<DetailPlay> {
                                   ? 0.0
                                   : currentPosition.inSeconds /
                                       duration.inSeconds;
-
                           return Padding(
                             padding: EdgeInsets.only(left: 10, right: 10),
                             child: Flex(
                               direction: Axis.horizontal,
                               children: [
-                                Text(
-                                  '${currentPosition.toString().split('.').first} ',
-                                  style: TextStyle(color: Colors.white),
+                                SizedBox(
+                                  width: 60,
+                                  child: Text(
+                                    currentPosition.toString().split('.').first,
+                                    style: textWhite,
+                                  ),
                                 ),
                                 Expanded(
                                   child: Slider(
                                     value: progress,
                                     min: 0.0,
                                     max: 1.0,
-                                    onChanged: _onSliderChanged,
+                                    onChanged: (value) {
+                                      var newPosition = Duration(
+                                        seconds:
+                                            (value * duration.inSeconds)
+                                                .toInt(),
+                                      );
+                                      _onSliderChanged(newPosition);
+                                    },
                                   ),
                                 ),
-                                Text(
-                                  duration.toString().split('.').first,
-                                  style: TextStyle(color: Colors.white),
+                                SizedBox(
+                                  width: 60,
+                                  child: Text(
+                                    duration.toString().split('.').first,
+                                    style: textWhite,
+                                  ),
                                 ),
+                                SizedBox(width: 10),
+                                Icon(Icons.scale, color: Colors.white),
                               ],
                             ),
                           );
