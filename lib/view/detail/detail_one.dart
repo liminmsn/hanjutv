@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hanjutv/api/api_detail_one.dart';
 import 'package:hanjutv/api/api_home.dart';
+import 'package:hanjutv/api/api_play.dart';
 
 class DetailOne extends StatefulWidget {
   final YCardITem yCardITem;
@@ -36,6 +37,7 @@ class _DetailOneState extends State<DetailOne> {
 
   // TODO:播放事件
   openPlay(ApiDetailItemTwoTagJishu ji) {
+    ApiPlay.getData(ji.url);
     // showDialog(
     //   context: context,
     //   builder: (context) {
