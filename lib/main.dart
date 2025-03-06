@@ -47,10 +47,45 @@ class MyAppCenter extends StatefulWidget {
 }
 
 //主程序state
-class _MyAppCenterState extends State<MyAppCenter> {
+class _MyAppCenterState extends State<MyAppCenter>
+    with SingleTickerProviderStateMixin {
   late int selectIdx = 0;
 
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   final List<Widget> viewList = [ViewHome(), ViewLike(), ViewLike()];
+  final List<NavIcon> iconList = [
+    NavIcon(
+      '热播推荐',
+      icon: Icons.smart_display_outlined,
+      selectIcon: Icons.new_releases,
+    ),
+    NavIcon(
+      '连续剧',
+      icon: Icons.smart_display_outlined,
+      selectIcon: Icons.smart_display,
+    ),
+    NavIcon(
+      '电影',
+      icon: Icons.movie_filter_outlined,
+      selectIcon: Icons.movie_filter,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +100,7 @@ class _MyAppCenterState extends State<MyAppCenter> {
                 child: Row(
                   children: [
                     Container(
-                      width: constraints.minWidth >= 600 ? 120 : null,
+                      width: constraints.minWidth >= 600 ? 150 : null,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -80,41 +115,18 @@ class _MyAppCenterState extends State<MyAppCenter> {
                       child: NavigationRail(
                         extended: constraints.minWidth >= 600,
                         destinations: [
-                          NavigBtn(
-                            active: selectIdx == 0,
-                            icon: Icon(Icons.home_outlined, size: 20),
-                            selectedIcon: Icon(
-                              Icons.home,
-                              color: selectColor,
-                              size: 20,
+                          for (var i = 0; i < iconList.length; i++)
+                            NavigBtn(
+                              active: selectIdx == i,
+                              icon: Icon(iconList[i].icon),
+                              selectedIcon: Icon(
+                                iconList[i].selectIcon,
+                                color: selectColor,
+                              ),
+                              selectColor: selectColor,
+                              label: iconList[i].label,
                             ),
-                            selectColor: selectColor,
-                            label: '推荐',
-                          ),
-                          NavigBtn(
-                            active: selectIdx == 1,
-                            icon: Icon(Icons.favorite_outline, size: 20),
-                            selectedIcon: Icon(
-                              Icons.favorite,
-                              color: selectColor,
-                              size: 20,
-                            ),
-                            label: '韩剧',
-                            selectColor: selectColor,
-                          ),
-                          NavigBtn(
-                            active: selectIdx == 2,
-                            icon: Icon(Icons.favorite_outline, size: 20),
-                            selectedIcon: Icon(
-                              Icons.favorite,
-                              color: selectColor,
-                              size: 20,
-                            ),
-                            label: '韩剧',
-                            selectColor: selectColor,
-                          ),
                         ],
-
                         selectedIndex: selectIdx,
                         onDestinationSelected: (value) {
                           setState(() => selectIdx = value);
@@ -131,6 +143,13 @@ class _MyAppCenterState extends State<MyAppCenter> {
       },
     );
   }
+}
+
+class NavIcon {
+  final IconData icon;
+  final IconData selectIcon;
+  final String label;
+  NavIcon(this.label, {required this.icon, required this.selectIcon});
 }
 
 //顶部标题栏
