@@ -20,7 +20,7 @@ class ApiDetailOne {
       director:
           // ignore: prefer_is_empty
           rows.children[1].children.length > 0
-              ? rows.children[1].children[1].text
+              ? rows.children[1].nodes[1].toString().replaceAll('"', '')
               : '未知',
       classify: rows.children[2].children[1].text,
       region: rows.children[3].children[1].text,
