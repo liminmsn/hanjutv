@@ -21,9 +21,10 @@ class ApiDetailOne {
         score: '',
         remarks: imgInfo.getElementsByClassName('fed-list-remarks')[0].text,
         title:
-            rows
-                .getElementsByClassName('fed-part-eone')[0]
-                .getElementsByTagName('a')[0]
+            dom
+                .getElementsByClassName('fed-deta-content')[0]
+                .getElementsByTagName('h3')[0]
+                .children[0]
                 .text,
         desc: '',
         src: '',
