@@ -19,9 +19,9 @@ class ApiDetailOne {
           .join('\t'),
       director:
           // ignore: prefer_is_empty
-          rows.children[1].children.length > 0
-              ? rows.children[1].nodes[1].toString().replaceAll('"', '')
-              : '未知',
+          rows.children[1].getElementsByTagName('a').length > 0
+              ? rows.children[1].children[1].text
+              : rows.children[1].nodes[1].toString().replaceAll('"', ''),
       classify: rows.children[2].children[1].text,
       region: rows.children[3].children[1].text,
       year: rows.children[4].children[1].text,
