@@ -50,14 +50,6 @@ class MyAppCenter extends StatefulWidget {
 
 //主程序state
 class _MyAppCenterState extends State<MyAppCenter> {
-  late int selectIdx = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  final List<Widget> viewList = [ViewHome(), TvDrama(), Movie(),About()];
   final List<NavIcon> iconList = [
     NavIcon(
       '热播推荐',
@@ -74,12 +66,36 @@ class _MyAppCenterState extends State<MyAppCenter> {
       icon: Icons.movie_filter_outlined,
       selectIcon: Icons.movie_filter,
     ),
-    NavIcon(
-      '关于',
-      icon: Icons.info_outline,
-      selectIcon: Icons.info,
-    ),
+    NavIcon('关于', icon: Icons.info_outline, selectIcon: Icons.info),
   ];
+  late List<Widget> viewList = [
+    ViewHome(scrollController: scrollController),
+    TvDrama(),
+    Movie(),
+    About(),
+  ];
+  late int selectIdx = 0;
+
+  ScrollController scrollController = ScrollController();
+  late double num = 0;
+  void scrollListener() {
+    setState(() {
+      num = scrollController.offset / scrollController.position.maxScrollExtent;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(scrollListener);
+  }
+
+  @override
+  void dispose() {
+    scrollController.addListener(scrollListener);
+    scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +103,19 @@ class _MyAppCenterState extends State<MyAppCenter> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
+          floatingActionButton:
+              num > 0.4
+                  ? FloatingActionButton(
+                    onPressed: () {
+                      scrollController.animateTo(
+                        0,
+                        duration: Duration(seconds: 1),
+                        curve: Curves.ease,
+                      );
+                    },
+                    child: Icon(Icons.upload),
+                  )
+                  : null,
           body: Column(
             children: [
               if (Platform.isWindows) TopBar(),
