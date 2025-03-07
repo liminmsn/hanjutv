@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hanjutv/api/api_home.dart';
+import 'package:hanjutv/api/api_tv_drama.dart';
 import 'package:hanjutv/component/ycard.dart';
 import 'package:hanjutv/view/detail/detail_one.dart';
 
 class YgridView extends StatelessWidget {
   final List<YCardITem> ycardList;
   final ScrollController? scrollController;
-  const YgridView(this.ycardList, {super.key, this.scrollController});
+  final List<YTags>? ytags;
+  const YgridView(
+    this.ycardList, {
+    super.key,
+    this.scrollController,
+    this.ytags,
+  });
+
+  bool isDis(YTags ytags) {
+    if (ytags.label == '...') return true;
+    if (num.tryParse(ytags.label) != null && ytags.src == 'javascript:;') {
+      return true;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +52,48 @@ class YgridView extends StatelessWidget {
                   )
                   : Column(
                     children: [
+                      if (ytags != null)
+                        Padding(
+                          padding: const EdgeInsets.all(speed),
+                          child: Flex(
+                            direction: Axis.horizontal,
+                            spacing: 2,
+                            children: [
+                              for (var item in ytags!.where((e) {
+                                return e.src != 'javascript:;' ||
+                                    num.tryParse(e.label) != null ||
+                                    e.label == '...';
+                              }))
+                                Expanded(
+                                  flex: 1,
+                                  child: InkWell(
+                                    onTap: isDis(item) ? null : () {
+                                      
+                                    },
+                                    child: Container(
+                                      color:
+                                          item.label == '...'
+                                              ? Theme.of(
+                                                context,
+                                              ).colorScheme.inversePrimary
+                                              : isDis(item)
+                                              ? Theme.of(
+                                                context,
+                                              ).colorScheme.primary
+                                              : Theme.of(
+                                                context,
+                                              ).colorScheme.primaryContainer,
+                                      child: Text(
+                                        item.label,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
                       SizedBox(height: speed),
                       Expanded(
                         child: GridView.builder(

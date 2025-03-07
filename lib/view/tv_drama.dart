@@ -12,11 +12,13 @@ class TvDrama extends StatefulWidget {
 
 class _TvDramaState extends State<TvDrama> {
   late List<YCardITem> ycardList = [];
+  late List<YTags> ytags = [];
   fetchData() async {
     var data = await ApiTvDrama.getData();
     if (mounted) {
       setState(() {
         ycardList = data.yCardITem;
+        ytags = data.one;
       });
     }
   }
@@ -29,6 +31,6 @@ class _TvDramaState extends State<TvDrama> {
 
   @override
   Widget build(BuildContext context) {
-    return YgridView(ycardList);
+    return YgridView(ycardList, ytags: ytags);
   }
 }
