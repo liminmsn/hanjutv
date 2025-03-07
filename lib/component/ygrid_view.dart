@@ -45,10 +45,15 @@ class YgridView extends StatelessWidget {
                         // ),
                         SpinKitDualRing(
                           color: Theme.of(context).colorScheme.primaryContainer,
-                          size: 40,
+                          size: MediaQuery.of(context).size.height * 0.05,
                         ),
                         SizedBox(height: 20),
-                        Text("加载中..."),
+                        Text(
+                          "加载中...",
+                          style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.height * 0.02,
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -90,7 +95,12 @@ class YgridView extends StatelessWidget {
                                     child: Text(
                                       item.label,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                            0.02,
+                                      ),
                                     ),
                                   ),
                                 ),

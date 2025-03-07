@@ -138,14 +138,26 @@ class _DetailOneState extends State<DetailOne> {
                                           if (apiDetailItemTwo.tags.isNotEmpty)
                                             ElevatedButton(
                                               style: ButtonStyle(
+                                                textStyle:
+                                                    WidgetStateProperty.all<
+                                                      TextStyle
+                                                    >(
+                                                      TextStyle(
+                                                        fontSize:
+                                                            MediaQuery.of(
+                                                              context,
+                                                            ).size.height *
+                                                            0.03,
+                                                      ),
+                                                    ),
                                                 backgroundColor:
                                                     WidgetStateProperty.all<
                                                       Color
                                                     >(
-                                                      Theme.of(
-                                                        context,
-                                                      ).colorScheme.primaryContainer,
-                                                    ), // 设置背景颜色为蓝色
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .primaryContainer,
+                                                    ),
                                               ),
                                               onPressed: () {
                                                 openPlay(
