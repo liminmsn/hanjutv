@@ -8,6 +8,7 @@ import 'package:hanjutv/view/home.dart';
 import 'package:hanjutv/view/movie.dart';
 import 'package:hanjutv/view/tv_drama.dart';
 import 'package:hanjutv/view/about.dart';
+import 'package:hanjutv/view/variety.dart';
 
 void main() {
   runApp(const MyApp());
@@ -68,12 +69,18 @@ class _MyAppCenterState extends State<MyAppCenter> {
       icon: Icons.movie_filter_outlined,
       selectIcon: Icons.movie_filter,
     ),
+    NavIcon(
+      '综艺',
+      icon: Icons.play_circle_outline,
+      selectIcon: Icons.play_circle,
+    ),
     NavIcon('关于', icon: Icons.info_outline, selectIcon: Icons.info),
   ];
   late List<Widget> viewList = [
     ViewHome(scrollController: scrollController),
     TvDrama(),
     Movie(),
+    Variety(),
     About(),
   ];
   late int selectIdx = 0;
