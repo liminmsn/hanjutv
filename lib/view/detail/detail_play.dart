@@ -126,7 +126,9 @@ class _DetailPlayState extends State<DetailPlay> {
                                 if (playItem.vodData.vodName != '')
                                   Text(
                                     '${playItem.vodData.vodName} ${widget.playJi.name}',
-                                    style: textWhite,
+                                    style: textWhite.copyWith(
+                                      fontSize: labelSize * 2,
+                                    ),
                                   ),
                               ],
                             ),
