@@ -28,9 +28,9 @@ class YgridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double speed = 4;
     return LayoutBuilder(
       builder: (context, constraints) {
+        double speed = MediaQuery.of(context).size.height * 0.01;
         return Container(
           padding: EdgeInsets.only(left: speed, right: speed),
           height: MediaQuery.of(context).size.height,
@@ -55,51 +55,49 @@ class YgridView extends StatelessWidget {
                   : Column(
                     children: [
                       if (ytags != null)
-                        Padding(
-                          padding: const EdgeInsets.all(speed),
-                          child: Flex(
-                            direction: Axis.horizontal,
-                            spacing: 2,
-                            children: [
-                              for (var item in ytags!.where((e) {
-                                return e.src != 'javascript:;' ||
-                                    num.tryParse(e.label) != null ||
-                                    e.label == '...';
-                              }))
-                                Expanded(
-                                  flex: 1,
-                                  child: InkWell(
-                                    onTap:
-                                        isDis(item)
-                                            ? null
-                                            : () {
-                                              fetchData!(item.src);
-                                            },
-                                    child: Container(
-                                      color:
-                                          item.label == '...'
-                                              ? Theme.of(
-                                                context,
-                                              ).colorScheme.inversePrimary
-                                              : isDis(item)
-                                              ? Theme.of(
-                                                context,
-                                              ).colorScheme.primary
-                                              : Theme.of(
-                                                context,
-                                              ).colorScheme.primaryContainer,
-                                      child: Text(
-                                        item.label,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(color: Colors.white),
-                                      ),
+                        Flex(
+                          direction: Axis.horizontal,
+                          spacing: 2,
+                          children: [
+                            for (var item in ytags!.where((e) {
+                              return e.src != 'javascript:;' ||
+                                  num.tryParse(e.label) != null ||
+                                  e.label == '...';
+                            }))
+                              Expanded(
+                                flex: 1,
+                                child: InkWell(
+                                  onTap:
+                                      isDis(item)
+                                          ? null
+                                          : () {
+                                            fetchData!(item.src);
+                                          },
+                                  child: Container(
+                                    padding: EdgeInsets.all(speed * 0.2),
+                                    color:
+                                        item.label == '...'
+                                            ? Theme.of(
+                                              context,
+                                            ).colorScheme.inversePrimary
+                                            : isDis(item)
+                                            ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                            : Theme.of(
+                                              context,
+                                            ).colorScheme.primaryContainer,
+                                    child: Text(
+                                      item.label,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 ),
-                            ],
-                          ),
+                              ),
+                          ],
                         ),
-                      if (ytags == null) SizedBox(height: speed),
+                      // if (ytags == null) SizedBox(height: speed),
                       Expanded(
                         child: GridView.builder(
                           controller: scrollController,
