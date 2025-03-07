@@ -38,10 +38,12 @@ class ApiTvDrama {
     }
     apiTvDramaItem = apiTv;
   }
-  static Future<ApiTvDramaItem> getData({
-    String url = 'vodtype/hanguodianshiju/',
-  }) async {
-    var res = await Yrequest(url: "${Yrequest.url_}$url").then();
+  static Future<ApiTvDramaItem> getData(String? url) async {
+    String url_ = 'vodtype/hanguodianshiju/';
+    if (url != null) {
+      url_ = url;
+    }
+    var res = await Yrequest(url: "${Yrequest.url_}$url_").then();
     return ApiTvDrama(res.body).apiTvDramaItem;
   }
 }

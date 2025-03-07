@@ -9,11 +9,13 @@ class YgridView extends StatelessWidget {
   final List<YCardITem> ycardList;
   final ScrollController? scrollController;
   final List<YTags>? ytags;
+  final Function(String url)? fetchData;
   const YgridView(
     this.ycardList, {
     super.key,
     this.scrollController,
     this.ytags,
+    this.fetchData,
   });
 
   bool isDis(YTags ytags) {
@@ -67,7 +69,12 @@ class YgridView extends StatelessWidget {
                                 Expanded(
                                   flex: 1,
                                   child: InkWell(
-                                    onTap: isDis(item) ? null : () {},
+                                    onTap:
+                                        isDis(item)
+                                            ? null
+                                            : () {
+                                              fetchData!(item.src);
+                                            },
                                     child: Container(
                                       color:
                                           item.label == '...'
