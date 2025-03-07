@@ -14,9 +14,11 @@ class _TvDramaState extends State<TvDrama> {
   late List<YCardITem> ycardList = [];
   fetchData() async {
     var data = await ApiTvDrama.getData();
-    setState(() {
-      ycardList = data.yCardITem;
-    });
+    if (mounted) {
+      setState(() {
+        ycardList = data.yCardITem;
+      });
+    }
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
@@ -152,7 +154,10 @@ class _MyAppCenterState extends State<MyAppCenter> {
                         ],
                         selectedIndex: selectIdx,
                         onDestinationSelected: (value) {
-                          setState(() => selectIdx = value);
+                          setState(() {
+                            selectIdx = value;
+                            num = 0;
+                          });
                         },
                       ),
                     ),

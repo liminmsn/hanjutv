@@ -14,11 +14,14 @@ class _ViewHomeState extends State<ViewHome> {
   late List<YCardITem> ycardList = [];
   fetchData() async {
     var data = await ApiHome.getData();
-    setState(() {
-      ycardList = data;
-    });
+    if (mounted) {
+      setState(() {
+        ycardList = data;
+      });
+    }
   }
 
+  int fetach = 0;
   @override
   void initState() {
     super.initState();
