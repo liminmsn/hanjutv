@@ -74,7 +74,7 @@ class _MyAppCenterState extends State<MyAppCenter> {
       icon: Icons.play_circle_outline,
       selectIcon: Icons.play_circle,
     ),
-    NavIcon('关于', icon: Icons.info_outline, selectIcon: Icons.info),
+    NavIcon('打赏', icon: Icons.paid_outlined, selectIcon: Icons.paid),
   ];
   late List<Widget> viewList = [
     ViewHome(scrollController: scrollController),
