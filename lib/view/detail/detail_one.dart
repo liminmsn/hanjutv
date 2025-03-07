@@ -155,7 +155,7 @@ class _DetailOneState extends State<DetailOne> {
                                                     MediaQuery.of(
                                                           context,
                                                         ).size.height *
-                                                        0.015,
+                                                        0.01,
                                                   ),
                                                   child: Text("立即播放"),
                                                 ),
