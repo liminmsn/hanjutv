@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:hanjutv/view/home.dart';
+import 'package:hanjutv/view/like.dart';
 import 'package:hanjutv/view/movie.dart';
 import 'package:hanjutv/view/tv_drama.dart';
 import 'package:hanjutv/view/about.dart';
@@ -72,14 +73,16 @@ class _MyAppCenterState extends State<MyAppCenter> {
       icon: Icons.play_circle_outline,
       selectIcon: Icons.play_circle,
     ),
+    NavIcon('收藏', icon: Icons.bookmark_outline, selectIcon: Icons.bookmark),
     NavIcon('打赏', icon: Icons.paid_outlined, selectIcon: Icons.paid),
   ];
   late List<Widget> viewList = [
     ViewHome(scrollController: scrollController),
-    TvDrama(),
-    Movie(),
-    Variety(),
-    About(),
+    ViewTvDrama(),
+    ViewMovie(),
+    ViewVariety(),
+    ViewLike(),
+    ViewAbout(),
   ];
   late int selectIdx = 0;
 

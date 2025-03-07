@@ -3,14 +3,14 @@ import 'package:hanjutv/api/api_movie.dart';
 import 'package:hanjutv/component/ygrid_view.dart';
 import 'package:hanjutv/interface/main_tv_move.dart';
 
-class Movie extends StatefulWidget {
-  const Movie({super.key});
+class ViewMovie extends StatefulWidget {
+  const ViewMovie({super.key});
 
   @override
-  State<Movie> createState() => _MovieState();
+  State<ViewMovie> createState() => _MovieState();
 }
 
-class _MovieState extends State<Movie> with MainTvMove {
+class _MovieState extends State<ViewMovie> with MainTvMove {
   @override
   fetchData(url) async {
     setState(() {

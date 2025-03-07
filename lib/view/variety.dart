@@ -3,14 +3,14 @@ import 'package:hanjutv/api/api_Variety.dart';
 import 'package:hanjutv/component/ygrid_view.dart';
 import 'package:hanjutv/interface/main_tv_move.dart';
 
-class Variety extends StatefulWidget {
-  const Variety({super.key});
+class ViewVariety extends StatefulWidget {
+  const ViewVariety({super.key});
 
   @override
-  State<Variety> createState() => _VarietyState();
+  State<ViewVariety> createState() => _VarietyState();
 }
 
-class _VarietyState extends State<Variety> with MainTvMove {
+class _VarietyState extends State<ViewVariety> with MainTvMove {
   @override
   fetchData(url) async {
     setState(() {

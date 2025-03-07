@@ -3,14 +3,14 @@ import 'package:hanjutv/api/api_tv_drama.dart';
 import 'package:hanjutv/component/ygrid_view.dart';
 import 'package:hanjutv/interface/main_tv_move.dart';
 
-class TvDrama extends StatefulWidget {
-  const TvDrama({super.key});
+class ViewTvDrama extends StatefulWidget {
+  const ViewTvDrama({super.key});
 
   @override
-  State<TvDrama> createState() => _TvDramaState();
+  State<ViewTvDrama> createState() => _TvDramaState();
 }
 
-class _TvDramaState extends State<TvDrama> with MainTvMove {
+class _TvDramaState extends State<ViewTvDrama> with MainTvMove {
   @override
   fetchData(url) async {
     setState(() {
