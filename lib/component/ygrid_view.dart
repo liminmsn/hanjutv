@@ -13,9 +13,9 @@ class YgridView extends StatelessWidget {
   const YgridView(
     this.ycardList, {
     super.key,
-    this.scrollController,
     this.ytags,
     this.fetchData,
+    this.scrollController,
   });
 
   bool isDis(YTags ytags) {
