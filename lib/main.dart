@@ -107,6 +107,14 @@ class _MyAppCenterState extends State<MyAppCenter> {
     super.dispose();
   }
 
+  getColor(int idx) {
+    if (idx == 4) return Colors.red;
+    if (idx == 5) return Colors.orangeAccent;
+    if (idx == 0) return Colors.lightGreen;
+    if (idx == 1 || idx == 2 || idx == 3) return Colors.black;
+    return Theme.of(context).colorScheme.primary;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Color selectColor = Theme.of(context).colorScheme.primary;
@@ -154,7 +162,7 @@ class _MyAppCenterState extends State<MyAppCenter> {
                               icon: Icon(iconList[i].icon),
                               selectedIcon: Icon(
                                 iconList[i].selectIcon,
-                                color: selectColor,
+                                color: getColor(i),
                               ),
                               selectColor: selectColor,
                               label: iconList[i].label,

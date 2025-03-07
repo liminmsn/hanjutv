@@ -146,7 +146,7 @@ class _DetailPlayState extends State<DetailPlay> {
                                   size: 40,
                                 ),
                                 SizedBox(height: 20),
-                                Text("loding...", style: textWhite),
+                                Text("加载中...", style: textWhite),
                               ],
                             ),
                           if (_controller.value.isInitialized &&

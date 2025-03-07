@@ -48,7 +48,7 @@ class YgridView extends StatelessWidget {
                           size: 40,
                         ),
                         SizedBox(height: 20),
-                        Text("loding..."),
+                        Text("加载中..."),
                       ],
                     ),
                   )
