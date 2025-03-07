@@ -67,9 +67,7 @@ class YgridView extends StatelessWidget {
                                 Expanded(
                                   flex: 1,
                                   child: InkWell(
-                                    onTap: isDis(item) ? null : () {
-                                      
-                                    },
+                                    onTap: isDis(item) ? null : () {},
                                     child: Container(
                                       color:
                                           item.label == '...'
@@ -94,7 +92,7 @@ class YgridView extends StatelessWidget {
                             ],
                           ),
                         ),
-                      SizedBox(height: speed),
+                      if (ytags == null) SizedBox(height: speed),
                       Expanded(
                         child: GridView.builder(
                           controller: scrollController,
