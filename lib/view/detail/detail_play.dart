@@ -163,7 +163,7 @@ class _DetailPlayState extends State<DetailPlay> {
                               },
                               icon: Icon(
                                 isPlay ? Icons.pause_circle : Icons.play_circle,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.primaryContainer,
                                 size: iconSize * 3,
                               ),
                             ),
@@ -196,6 +196,7 @@ class _DetailPlayState extends State<DetailPlay> {
                                       ),
                                       Expanded(
                                         child: Slider(
+                                          thumbColor: Theme.of(context).colorScheme.primaryContainer,
                                           value: progress,
                                           min: 0.0,
                                           max: 1.0,
