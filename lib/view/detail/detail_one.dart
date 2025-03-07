@@ -137,6 +137,16 @@ class _DetailOneState extends State<DetailOne> {
                                           Spacer(),
                                           if (apiDetailItemTwo.tags.isNotEmpty)
                                             ElevatedButton(
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    WidgetStateProperty.all<
+                                                      Color
+                                                    >(
+                                                      Theme.of(
+                                                        context,
+                                                      ).colorScheme.primaryContainer,
+                                                    ), // 设置背景颜色为蓝色
+                                              ),
                                               onPressed: () {
                                                 openPlay(
                                                   apiDetailItemTwo

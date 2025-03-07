@@ -48,7 +48,7 @@ class _DetailPlayState extends State<DetailPlay> {
     super.initState();
     _videoProgressNotifier = ValueNotifier(Duration.zero);
     playHls(
-      "https://videos.pexels.com/video-files/30417137/13034832_1440_2560_30fps.mp4",
+      "https://videos.pexels.com/video-files/30284412/12981695_2560_1440_30fps.mp4",
     );
     ApiPlay.getData(widget.playJi.url).then((res) {
       if (res != null) {
