@@ -141,7 +141,10 @@ class _MyAppCenterState extends State<MyAppCenter> {
                 child: Row(
                   children: [
                     Container(
-                      width: constraints.minWidth >= 600 ? 150 : null,
+                      width:
+                          constraints.minWidth >= 600
+                              ? MediaQuery.of(context).size.height * 0.22
+                              : null,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -154,20 +157,31 @@ class _MyAppCenterState extends State<MyAppCenter> {
                         ],
                       ),
                       child: NavigationRail(
-                        extended: constraints.minWidth >= 600,
+                        // minWidth: constraints.minWidth >= 600 ? 70 : null,
                         destinations: [
                           for (var i = 0; i < iconList.length; i++)
                             NavigBtn(
                               active: selectIdx == i,
-                              icon: Icon(iconList[i].icon),
+                              icon: Icon(
+                                iconList[i].icon,
+                                size:
+                                    MediaQuery.of(context).size.height * 0.035,
+                              ),
                               selectedIcon: Icon(
                                 iconList[i].selectIcon,
                                 color: getColor(i),
+                                size:
+                                    MediaQuery.of(context).size.height * 0.035,
                               ),
                               selectColor: selectColor,
                               label: iconList[i].label,
+                              labelSize:
+                                  MediaQuery.of(context).size.height * 0.02,
                             ),
                         ],
+                        extended: constraints.minWidth >= 600,
+                        elevation: 2,
+                        // useIndicator: true,
                         selectedIndex: selectIdx,
                         onDestinationSelected: (value) {
                           setState(() {
@@ -196,7 +210,7 @@ class NavIcon {
   NavIcon(this.label, {required this.icon, required this.selectIcon});
 }
 
-//顶部标题栏
+//window顶部标题栏
 class TopBar extends StatelessWidget {
   const TopBar({super.key});
 
@@ -242,11 +256,15 @@ class NavigBtn extends NavigationRailDestination {
     required super.icon,
     required super.selectedIcon,
     required String label,
+    required double labelSize,
     required Color selectColor,
   }) : super(
          label: Text(
            label,
-           style: TextStyle(color: active ? selectColor : null),
+           style: TextStyle(
+             color: active ? selectColor : null,
+             fontSize: labelSize,
+           ),
          ),
        );
 }
