@@ -136,37 +136,30 @@ class _DetailOneState extends State<DetailOne> {
                                           ),
                                           Spacer(),
                                           if (apiDetailItemTwo.tags.isNotEmpty)
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                textStyle:
-                                                    WidgetStateProperty.all<
-                                                      TextStyle
-                                                    >(
-                                                      TextStyle(
-                                                        fontSize:
-                                                            MediaQuery.of(
-                                                              context,
-                                                            ).size.height *
-                                                            0.03,
-                                                      ),
-                                                    ),
-                                                backgroundColor:
-                                                    WidgetStateProperty.all<
-                                                      Color
-                                                    >(
-                                                      Theme.of(context)
-                                                          .colorScheme
-                                                          .primaryContainer,
-                                                    ),
+                                            Card(
+                                              clipBehavior: Clip.antiAlias,
+                                              color:
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .primaryContainer,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  openPlay(
+                                                    apiDetailItemTwo
+                                                        .tags[0]
+                                                        .jishu[0],
+                                                  );
+                                                },
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(
+                                                    MediaQuery.of(
+                                                          context,
+                                                        ).size.height *
+                                                        0.015,
+                                                  ),
+                                                  child: Text("立即播放"),
+                                                ),
                                               ),
-                                              onPressed: () {
-                                                openPlay(
-                                                  apiDetailItemTwo
-                                                      .tags[0]
-                                                      .jishu[0],
-                                                );
-                                              },
-                                              child: Text("立即播放"),
                                             ),
                                         ],
                                       ),
@@ -369,7 +362,7 @@ class _YAnalectaState extends State<YAnalecta> {
               for (var i = 0; i < widget.apiDetailItemTwo.tags.length; i++)
                 Padding(
                   padding: EdgeInsets.only(right: 5),
-                  child: InkWell(
+                  child: GestureDetector(
                     onTap: () {
                       setState(() {
                         selectIdx_ = i;
@@ -408,23 +401,24 @@ class _YAnalectaState extends State<YAnalecta> {
                   ? widget.apiDetailItemTwo.tags[selectIdx_].jishu.length
                   : 0,
               (idx) {
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      selectIdxTwo = idx;
-                      widget.openPlay(
-                        widget
-                            .apiDetailItemTwo
-                            .tags[selectIdx_]
-                            .jishu[selectIdxTwo],
-                      );
-                    });
-                  },
-                  child: Card(
-                    color:
-                        selectIdxTwo == idx
-                            ? Theme.of(context).colorScheme.primaryContainer
-                            : null,
+                return Card(
+                  color:
+                      selectIdxTwo == idx
+                          ? Theme.of(context).colorScheme.primaryContainer
+                          : null,
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectIdxTwo = idx;
+                        widget.openPlay(
+                          widget
+                              .apiDetailItemTwo
+                              .tags[selectIdx_]
+                              .jishu[selectIdxTwo],
+                        );
+                      });
+                    },
                     child: Center(
                       child: Align(
                         child: Text(
@@ -479,7 +473,7 @@ class _ToggleLabelState extends State<YToggleLabel> {
             for (var i = 0; i < widget.labelArr.length; i++)
               Padding(
                 padding: EdgeInsets.only(bottom: 10, right: 10),
-                child: InkWell(
+                child: GestureDetector(
                   onTap: () {
                     setState(() {
                       selectIdx = i;
