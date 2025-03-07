@@ -10,6 +10,6 @@ class ViewLike extends StatefulWidget {
 class _ViewLikeState extends State<ViewLike> {
   @override
   Widget build(BuildContext context) {
-    return Text("like");
+    return Center(child: Align(child: Text("打赏过30人开发此功能")));
   }
 }

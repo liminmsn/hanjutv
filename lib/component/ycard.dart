@@ -55,18 +55,18 @@ class Ycard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: -18,
-                      right: -8,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.bookmark,
-                          size: label3Size * 3,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
+                    // Positioned(
+                    //   top: -18,
+                    //   right: -8,
+                    //   child: IconButton(
+                    //     onPressed: () {},
+                    //     icon: Icon(
+                    //       Icons.bookmark,
+                    //       size: label3Size * 3,
+                    //       color: Colors.red,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
