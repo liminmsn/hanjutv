@@ -49,15 +49,9 @@ class _DetailOneState extends State<DetailOne> {
     final h3Size = MediaQuery.of(context).size.height * 0.02;
     final maxWidth = MediaQuery.of(context).size.width * 0.15;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Icon(Icons.reply),
-      ),
       body: Column(
         children: [
-          if (Platform.isWindows) TopBar(),
+          TopBar(showBack: true, title: widget.yCardITem.title),
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.96,

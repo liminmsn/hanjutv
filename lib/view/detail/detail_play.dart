@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hanjutv/api/api_detail_one.dart';
 import 'package:hanjutv/api/api_play.dart';
@@ -15,12 +14,8 @@ class DetailPlay extends StatefulWidget {
 }
 
 class _DetailPlayState extends State<DetailPlay> {
-  //初始化视频对象
   late PlayItem playItem = PlayItem.init();
-  //hls视频控制器
-  // Create a [Player] to control playback.
   late final player = Player();
-  // Create a [VideoController] to handle video output from [Player].
   late final controller = VideoController(player);
 
   @override
@@ -28,9 +23,10 @@ class _DetailPlayState extends State<DetailPlay> {
     super.initState();
     ApiPlay.getData(widget.playJi.url).then((res) {
       if (res != null) {
-        player.open(Media("https://v.cdnlz22.com/20250123/11624_66060547/index.m3u8"));
-        // player.open(Media("https://videos.pexels.com/video-files/30284412/12981695_2560_1440_30fps.mp4"));
-        // setState(() => playItem = res);
+        setState(() {
+          playItem = res;
+          player.open(Media(playItem.url));
+        });
       }
     });
   }
@@ -46,7 +42,10 @@ class _DetailPlayState extends State<DetailPlay> {
     return Scaffold(
       body: Column(
         children: [
-          if (Platform.isWindows) TopBar(),
+          TopBar(
+            showBack: true,
+            title: '${playItem.vodData.vodName} ${widget.playJi.name}',
+          ),
           Expanded(child: Video(controller: controller)),
         ],
       ),

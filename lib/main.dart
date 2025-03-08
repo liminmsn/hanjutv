@@ -2,7 +2,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:media_kit/media_kit.dart';                      // Provides [Player], [Media], [Playlist] etc.
+import 'package:media_kit/media_kit.dart'; // Provides [Player], [Media], [Playlist] etc.
 import 'package:hanjutv/view/home.dart';
 import 'package:hanjutv/view/like.dart';
 import 'package:hanjutv/view/movie.dart';
@@ -13,18 +13,15 @@ import 'package:hanjutv/view/variety.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
+  //启动app
   runApp(const MyApp());
-  //windows平台
-  if (Platform.isWindows) {
-    doWhenWindowReady(() {
-      final win = appWindow;
-      win.minSize = const Size(1000, 800);
-      win.size = const Size(1200, 800);
-      win.alignment = Alignment.center;
-      win.show();
-    });
-  }
-  //macos平台
+  doWhenWindowReady(() {
+    final win = appWindow;
+    win.minSize = const Size(1000, 800);
+    win.size = const Size(1200, 800);
+    win.alignment = Alignment.center;
+    win.show();
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -138,7 +135,7 @@ class _MyAppCenterState extends State<MyAppCenter> {
                   : null,
           body: Column(
             children: [
-              if (Platform.isWindows) TopBar(),
+              if (Platform.isWindows) TopBar(showBack: false),
               Expanded(
                 child: Row(
                   children: [
@@ -214,7 +211,9 @@ class NavIcon {
 
 //window顶部标题栏
 class TopBar extends StatelessWidget {
-  const TopBar({super.key});
+  late String? title;
+  final bool showBack;
+  TopBar({super.key, required this.showBack, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -231,8 +230,25 @@ class TopBar extends StatelessWidget {
               Expanded(
                 // flex: 6,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Row(children: [Text("韩剧tv")]),
+                  padding: EdgeInsets.only(left: 10, top: 4),
+                  child: Row(
+                    children: [
+                      if (showBack)
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(Icons.arrow_back),
+                            ),
+                            Text(title!),
+                          ],
+                        )
+                      else
+                        Text("韩剧tv"),
+                    ],
+                  ),
                 ),
               ),
               Row(

@@ -59,55 +59,7 @@ class YgridView extends StatelessWidget {
                   )
                   : Column(
                     children: [
-                      if (ytags != null)
-                        Flex(
-                          direction: Axis.horizontal,
-                          spacing: 2,
-                          children: [
-                            for (var item in ytags!.where((e) {
-                              return e.src != 'javascript:;' ||
-                                  num.tryParse(e.label) != null ||
-                                  e.label == '...';
-                            }))
-                              Expanded(
-                                flex: 1,
-                                child: InkWell(
-                                  onTap:
-                                      isDis(item)
-                                          ? null
-                                          : () {
-                                            fetchData!(item.src);
-                                          },
-                                  child: Container(
-                                    padding: EdgeInsets.all(speed * 0.2),
-                                    color:
-                                        item.label == '...'
-                                            ? Theme.of(
-                                              context,
-                                            ).colorScheme.inversePrimary
-                                            : isDis(item)
-                                            ? Theme.of(
-                                              context,
-                                            ).colorScheme.primary
-                                            : Theme.of(
-                                              context,
-                                            ).colorScheme.primaryContainer,
-                                    child: Text(
-                                      item.label,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            MediaQuery.of(context).size.height *
-                                            0.02,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      // if (ytags == null) SizedBox(height: speed),
+                      SizedBox(height: speed),
                       Expanded(
                         child: GridView.builder(
                           controller: scrollController,
@@ -144,6 +96,54 @@ class YgridView extends StatelessWidget {
                           },
                         ),
                       ),
+                      if (ytags != null)
+                        Flex(
+                          direction: Axis.horizontal,
+                          spacing: 2,
+                          children: [
+                            for (var item in ytags!.where((e) {
+                              return e.src != 'javascript:;' ||
+                                  num.tryParse(e.label) != null ||
+                                  e.label == '...';
+                            }))
+                              Expanded(
+                                flex: 1,
+                                child: InkWell(
+                                  onTap:
+                                      isDis(item)
+                                          ? null
+                                          : () {
+                                            fetchData!(item.src);
+                                          },
+                                  child: Container(
+                                    padding: EdgeInsets.all(speed * 0.2),
+                                    color:
+                                        item.label == '...'
+                                            ? Theme.of(
+                                              context,
+                                            ).colorScheme.inversePrimary
+                                            : isDis(item)
+                                            ? Theme.of(
+                                              context,
+                                            ).colorScheme.primaryContainer
+                                            : Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                    child: Text(
+                                      item.label,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                            0.02,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
                     ],
                   ),
         );
