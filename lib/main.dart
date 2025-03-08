@@ -246,7 +246,7 @@ class TopBar extends StatelessWidget {
                           ],
                         )
                       else
-                        Text("韩剧tv"),
+                        Text("好看韩剧"),
                     ],
                   ),
                 ),

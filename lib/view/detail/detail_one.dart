@@ -51,7 +51,7 @@ class _DetailOneState extends State<DetailOne> {
     return Scaffold(
       body: Column(
         children: [
-          TopBar(showBack: true, title: widget.yCardITem.title),
+          TopBar(showBack: true, title: apiDetailItemOne.yCardITem.title),
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.96,

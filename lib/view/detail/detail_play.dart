@@ -46,7 +46,12 @@ class _DetailPlayState extends State<DetailPlay> {
             showBack: true,
             title: '${playItem.vodData.vodName} ${widget.playJi.name}',
           ),
-          Expanded(child: Video(controller: controller)),
+          Expanded(
+            child: Video(
+              controller: controller,
+              filterQuality: FilterQuality.low,
+            ),
+          ),
         ],
       ),
     );
