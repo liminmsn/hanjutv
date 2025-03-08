@@ -1,8 +1,8 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:media_kit/media_kit.dart';                      // Provides [Player], [Media], [Playlist] etc.
 import 'package:hanjutv/view/home.dart';
 import 'package:hanjutv/view/like.dart';
 import 'package:hanjutv/view/movie.dart';
@@ -11,8 +11,9 @@ import 'package:hanjutv/view/about.dart';
 import 'package:hanjutv/view/variety.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized();
   runApp(const MyApp());
-
   //windows平台
   if (Platform.isWindows) {
     doWhenWindowReady(() {
