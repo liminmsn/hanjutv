@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hanjutv/api/api_detail_one.dart';
 import 'package:hanjutv/api/api_home.dart';
+import 'package:hanjutv/main.dart';
 import 'package:hanjutv/view/detail/detail_play.dart';
 
 class DetailOne extends StatefulWidget {
@@ -44,7 +46,7 @@ class _DetailOneState extends State<DetailOne> {
   @override
   Widget build(BuildContext context) {
     final titleSize = MediaQuery.of(context).size.height * 0.05;
-    final h3Size = MediaQuery.of(context).size.height * 0.022;
+    final h3Size = MediaQuery.of(context).size.height * 0.02;
     final maxWidth = MediaQuery.of(context).size.width * 0.15;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -53,253 +55,274 @@ class _DetailOneState extends State<DetailOne> {
         },
         child: Icon(Icons.reply),
       ),
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Padding(
-          padding: EdgeInsets.all(4),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 4,
-                child: Flex(
-                  direction: Axis.vertical,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: FractionallySizedBox(
-                        widthFactor: 1,
-                        child: Card(
-                          child: Padding(
-                            padding: EdgeInsets.all(h3Size),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(maxWidth: 300),
-                              child: Flex(
-                                direction: Axis.horizontal,
-                                children: [
-                                  SizedBox(
-                                    width: maxWidth,
-                                    height: maxWidth * 1.5,
-                                    child:
-                                        apiDetailItemOne.yCardITem.pics != ''
-                                            ? Image.network(
-                                              apiDetailItemOne.yCardITem.pics,
-                                            )
-                                            : Container(
-                                              color:
-                                                  Theme.of(
-                                                    context,
-                                                  ).colorScheme.primary,
-                                            ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(h3Size),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            apiDetailItemOne.yCardITem.title,
+      body: Column(
+        children: [
+          if (Platform.isWindows) TopBar(),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.96,
+            child: Padding(
+              padding: EdgeInsets.all(4),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: Flex(
+                      direction: Axis.vertical,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: FractionallySizedBox(
+                            widthFactor: 1,
+                            child: Card(
+                              child: Padding(
+                                padding: EdgeInsets.all(h3Size),
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(maxWidth: 300),
+                                  child: Flex(
+                                    direction: Axis.horizontal,
+                                    children: [
+                                      SizedBox(
+                                        width: maxWidth,
+                                        height: maxWidth * 1.5,
+                                        child:
+                                            apiDetailItemOne.yCardITem.pics !=
+                                                    ''
+                                                ? Image.network(
+                                                  apiDetailItemOne
+                                                      .yCardITem
+                                                      .pics,
+                                                )
+                                                : Container(
+                                                  color:
+                                                      Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
+                                                ),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Padding(
+                                          padding: EdgeInsets.all(h3Size),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                apiDetailItemOne
+                                                    .yCardITem
+                                                    .title,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: titleSize,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                '演员：${apiDetailItemOne.starring}',
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: h3Size,
+                                                ),
+                                              ),
+                                              Text(
+                                                '导演：${apiDetailItemOne.director}',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: h3Size,
+                                                ),
+                                              ),
+                                              Text(
+                                                '类型：${apiDetailItemOne.classify}',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: h3Size,
+                                                ),
+                                              ),
+                                              Text(
+                                                '年份：${apiDetailItemOne.year}',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: h3Size,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              if (apiDetailItemTwo
+                                                  .tags
+                                                  .isNotEmpty)
+                                                Card(
+                                                  clipBehavior: Clip.antiAlias,
+                                                  color:
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .primaryContainer,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      openPlay(
+                                                        apiDetailItemTwo
+                                                            .tags[0]
+                                                            .jishu[0],
+                                                      );
+                                                    },
+                                                    child: Padding(
+                                                      padding: EdgeInsets.all(
+                                                        MediaQuery.of(
+                                                              context,
+                                                            ).size.height *
+                                                            0.01,
+                                                      ),
+                                                      child: Text("立即播放"),
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Center(
+                                          child: Text(
+                                            '区域：${apiDetailItemOne.region}',
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              fontSize: titleSize,
-                                              fontWeight: FontWeight.bold,
+                                              fontSize: h3Size * 1.2,
                                             ),
                                           ),
-                                          Text(
-                                            '演员：${apiDetailItemOne.starring}',
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(fontSize: h3Size),
-                                          ),
-                                          Text(
-                                            '导演：${apiDetailItemOne.director}',
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(fontSize: h3Size),
-                                          ),
-                                          Text(
-                                            '类型：${apiDetailItemOne.classify}',
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(fontSize: h3Size),
-                                          ),
-                                          Text(
-                                            '年份：${apiDetailItemOne.year}',
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(fontSize: h3Size),
-                                          ),
-                                          Spacer(),
-                                          if (apiDetailItemTwo.tags.isNotEmpty)
-                                            Card(
-                                              clipBehavior: Clip.antiAlias,
-                                              color:
-                                                  Theme.of(context)
-                                                      .colorScheme
-                                                      .primaryContainer,
-                                              child: InkWell(
-                                                onTap: () {
-                                                  openPlay(
-                                                    apiDetailItemTwo
-                                                        .tags[0]
-                                                        .jishu[0],
-                                                  );
-                                                },
-                                                child: Padding(
-                                                  padding: EdgeInsets.all(
-                                                    MediaQuery.of(
-                                                          context,
-                                                        ).size.height *
-                                                        0.01,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: FractionallySizedBox(
+                            widthFactor: 1,
+                            child: Card(
+                              child: Padding(
+                                padding: EdgeInsets.all(h3Size),
+                                child: Column(
+                                  children: [
+                                    YToggleLabel(
+                                      h3Size: h3Size,
+                                      labelArr: ["选集播放", "视频介绍"],
+                                      widgetArr: [
+                                        YAnalecta(
+                                          h3Size: h3Size,
+                                          apiDetailItemTwo: apiDetailItemTwo,
+                                          openPlay: openPlay,
+                                        ),
+                                        YDescribes(
+                                          h3Size: h3Size,
+                                          apiDetailItemTwo: apiDetailItemTwo,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: FractionallySizedBox(
+                      heightFactor: 1,
+                      child: Card(
+                        child: ListView.builder(
+                          itemCount: apiDetailItemThree.length,
+                          itemBuilder: (context, index) {
+                            return ListBody(
+                              children: [
+                                ListTile(
+                                  title: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            var ycard = YCardITem.init();
+                                            ycard.src =
+                                                apiDetailItemThree[index].url;
+                                            return DetailOne(yCardITem: ycard);
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        MouseRegion(
+                                          child: Transform.rotate(
+                                            angle:
+                                                Random().nextDouble() > 0.5
+                                                    ? 0.1
+                                                    : -0.1,
+                                            child: Container(
+                                              padding: EdgeInsets.only(
+                                                left: 10,
+                                                right: 10,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: getColor(
+                                                  int.parse(
+                                                    apiDetailItemThree[index]
+                                                        .idx,
                                                   ),
-                                                  child: Text("立即播放"),
+                                                ),
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(h3Size * 0.1),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                apiDetailItemThree[index].idx,
+                                                style: TextStyle(
+                                                  color:
+                                                      Theme.of(
+                                                        context,
+                                                      ).colorScheme.onPrimary,
                                                 ),
                                               ),
                                             ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Center(
-                                      child: Text(
-                                        '区域：${apiDetailItemOne.region}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: h3Size * 1.2,
+                                          ),
                                         ),
-                                      ),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            apiDetailItemThree[index].name,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: h3Size),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: FractionallySizedBox(
-                        widthFactor: 1,
-                        child: Card(
-                          child: Padding(
-                            padding: EdgeInsets.all(h3Size),
-                            child: Column(
-                              children: [
-                                YToggleLabel(
-                                  h3Size: h3Size,
-                                  labelArr: ["选集播放", "视频介绍"],
-                                  widgetArr: [
-                                    YAnalecta(
-                                      h3Size: h3Size,
-                                      apiDetailItemTwo: apiDetailItemTwo,
-                                      openPlay: openPlay,
-                                    ),
-                                    YDescribes(
-                                      h3Size: h3Size,
-                                      apiDetailItemTwo: apiDetailItemTwo,
-                                    ),
-                                  ],
                                 ),
                               ],
-                            ),
-                          ),
+                            );
+                          },
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: FractionallySizedBox(
-                  heightFactor: 1,
-                  child: Card(
-                    child: ListView.builder(
-                      itemCount: apiDetailItemThree.length,
-                      itemBuilder: (context, index) {
-                        return ListBody(
-                          children: [
-                            ListTile(
-                              title: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        var ycard = YCardITem.init();
-                                        ycard.src =
-                                            apiDetailItemThree[index].url;
-                                        return DetailOne(yCardITem: ycard);
-                                      },
-                                    ),
-                                  );
-                                },
-                                child: Row(
-                                  children: [
-                                    MouseRegion(
-                                      child: Transform.rotate(
-                                        angle:
-                                            Random().nextDouble() > 0.5
-                                                ? 0.1
-                                                : -0.1,
-                                        child: Container(
-                                          padding: EdgeInsets.only(
-                                            left: 10,
-                                            right: 10,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: getColor(
-                                              int.parse(
-                                                apiDetailItemThree[index].idx,
-                                              ),
-                                            ),
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(h3Size * 0.1),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            apiDetailItemThree[index].idx,
-                                            style: TextStyle(
-                                              color:
-                                                  Theme.of(
-                                                    context,
-                                                  ).colorScheme.onPrimary,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Expanded(
-                                      child: Text(
-                                        apiDetailItemThree[index].name,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(fontSize: h3Size),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -355,7 +378,7 @@ class _YAnalectaState extends State<YAnalecta> {
       children: [
         SizedBox(
           // height: 40,
-          height: MediaQuery.of(context).size.height * 0.06,
+          height: MediaQuery.of(context).size.height * 0.05,
           child: ListView(
             scrollDirection: Axis.horizontal, // 设置滚动方向为水平
             children: <Widget>[

@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.limeAccent),
-        fontFamily: GoogleFonts.sigmar().fontFamily,
+        // fontFamily: GoogleFonts.sigmar().fontFamily,
       ),
       darkTheme: ThemeData.dark(), // 深色主题（黑色主题）
       themeMode: ThemeMode.light,
