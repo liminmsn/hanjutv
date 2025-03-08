@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hanjutv/api/api_detail_one.dart';
 import 'package:hanjutv/api/api_play.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_player_control_panel/video_player_control_panel.dart';
+import 'package:video_player_win/video_player_win_plugin.dart';
 
 class DetailPlay extends StatefulWidget {
   final ApiDetailItemTwoTagJishu playJi;
@@ -27,26 +32,25 @@ class _DetailPlayState extends State<DetailPlay> {
   }
 
   //加载url视频
-  playHls(String url) {
-    _controller = VideoPlayerController.networkUrl(Uri.parse(url))
-      ..initialize().then((_) {
-        setState(() {});
-        //显示控件
-        setState(() => showCont = true);
-        // _controller.play();
-        // 定期更新视频播放进度
-        _controller.addListener(() {
-          if (_controller.value.isInitialized && _controller.value.isPlaying) {
-            _videoProgressNotifier.value = _controller.value.position;
-          }
-        });
-      });
+  playHls(String url) async {
+    _controller = VideoPlayerController.networkUrl(Uri.parse(url));
+    await _controller.initialize();
+    //显示控件
+    setState(() => showCont = true);
+    // _controller.play();
+    // 定期更新视频播放进度
+    _controller.addListener(() {
+      if (_controller.value.isInitialized && _controller.value.isPlaying) {
+        _videoProgressNotifier.value = _controller.value.position;
+      }
+    });
   }
 
   @override
   void initState() {
     super.initState();
     _videoProgressNotifier = ValueNotifier(Duration.zero);
+    if (!kIsWeb && Platform.isWindows) WindowsVideoPlayer.registerWith();
     playHls(
       "https://videos.pexels.com/video-files/30284412/12981695_2560_1440_30fps.mp4",
     );
@@ -73,187 +77,40 @@ class _DetailPlayState extends State<DetailPlay> {
 
   @override
   Widget build(BuildContext context) {
-    final iconSize = MediaQuery.of(context).size.height * 0.04;
-    final labelSize = MediaQuery.of(context).size.height * 0.018;
-    final labelWidth = MediaQuery.of(context).size.height * 0.08;
-    final TextStyle textWhite = TextStyle(
-      color: Colors.white,
-      fontSize: labelSize,
-    );
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return Container(
-            color: Colors.black,
-            child: GestureDetector(
-              onTap: () {
-                setState(() => showCont = !showCont);
-              },
-              child: Stack(
-                children: [
-                  FractionallySizedBox(
-                    heightFactor: 1,
-                    widthFactor: 1,
-                    child: Align(
-                      child: AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
-                      ),
-                    ),
-                  ),
-                  if (showCont)
-                    Positioned(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Flex(
-                              direction: Axis.horizontal,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    //返回就销毁视频、进度条控制器
-                                    _controller.dispose();
-                                    _videoProgressNotifier.dispose();
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_back,
-                                    color: Colors.white,
-                                    size: iconSize,
-                                  ),
-                                ),
-                                if (playItem.vodData.vodName != '')
-                                  Text(
-                                    '${playItem.vodData.vodName} ${widget.playJi.name}',
-                                    style: textWhite.copyWith(
-                                      fontSize: labelSize * 2,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          Spacer(),
-                          if (_controller.value.isInitialized == false)
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SpinKitDualRing(
-                                  color:
-                                      Theme.of(
-                                        context,
-                                      ).colorScheme.primaryContainer,
-                                  size: 40,
-                                ),
-                                SizedBox(height: 20),
-                                Text("加载中...", style: textWhite),
-                              ],
-                            ),
-                          if (_controller.value.isInitialized &&
-                              _controller.value.isBuffering == false &&
-                              showCont)
-                            IconButton(
-                              onPressed: () {
-                                if (_controller.value.isPlaying) {
-                                  _controller.pause();
-                                } else {
-                                  _controller.play();
-                                }
-                                setState(() => isPlay = !isPlay);
-                              },
-                              icon: Icon(
-                                isPlay ? Icons.pause_circle : Icons.play_circle,
-                                color:
-                                    Theme.of(
-                                      context,
-                                    ).colorScheme.primaryContainer,
-                                size: iconSize * 3,
-                              ),
-                            ),
-                          Spacer(),
-                          // 显示进度条
-                          if (showCont)
-                            ValueListenableBuilder<Duration>(
-                              valueListenable: _videoProgressNotifier,
-                              builder: (context, currentPosition, _) {
-                                final duration = _controller.value.duration;
-                                final progress =
-                                    duration == Duration.zero
-                                        ? 0.0
-                                        : currentPosition.inSeconds /
-                                            duration.inSeconds;
-                                return Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Flex(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      SizedBox(
-                                        width: labelWidth,
-                                        child: Text(
-                                          currentPosition
-                                              .toString()
-                                              .split('.')
-                                              .first,
-                                          style: textWhite,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Slider(
-                                          thumbColor:
-                                              Theme.of(
-                                                context,
-                                              ).colorScheme.primaryContainer,
-                                          value: progress,
-                                          min: 0.0,
-                                          max: 1.0,
-                                          onChanged: (value) {
-                                            var newPosition = Duration(
-                                              seconds:
-                                                  (value * duration.inSeconds)
-                                                      .toInt(),
-                                            );
-                                            _onSliderChanged(newPosition);
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: labelWidth,
-                                        child: Text(
-                                          duration.toString().split('.').first,
-                                          style: textWhite,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          if (isFull) {
-                                            appWindow.restore(); // 最小化窗口
-                                          } else {
-                                            appWindow.maximize();
-                                          }
-                                          setState(() => isFull = !isFull);
-                                        },
-                                        icon: Icon(
-                                          isFull
-                                              ? Icons.fullscreen_exit
-                                              : Icons.fullscreen,
-                                          size: iconSize,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          );
-        },
+      body: JkVideoControlPanel(
+        _controller,
+        showClosedCaptionButton: true,
+        showFullscreenButton: true,
+        showVolumeButton: true,
+
+        // // onPrevClicked: optional. If provided, a [previous] button will shown
+        // onPrevClicked:
+        //     (nowPlayIndex <= 0)
+        //         ? null
+        //         : () {
+        //           playPrevVideo();
+        //         },
+
+        // // onNextClicked: optional. If provided, a [next] button will shown
+        // onNextClicked:
+        //     (nowPlayIndex >= g_playlist.length - 1)
+        //         ? null
+        //         : () {
+        //           playNextVideo();
+        //         },
+
+        // // onPlayEnded: optional, called when the current media is play to end.
+        // onPlayEnded: () {
+        //   playNextVideo();
+        // },
       ),
+      // child: Align(
+      //   child: AspectRatio(
+      //     aspectRatio: _controller.value.aspectRatio,
+      //     child: VideoPlayer(_controller),
+      //   ),
+      // ),
     );
   }
 }
